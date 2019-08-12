@@ -172,29 +172,43 @@ export const reportBrokenSite = (tabId: number) =>
 
 export type GetViewPreferencesData = {
   showAdvancedView: boolean
+  statsBadgeVisible: boolean
 }
 
 const settingsKeys = {
-  showAdvancedView: { key: 'brave.shields.advanced_view_enabled', type: chrome.settingsPrivate.PrefType.BOOLEAN }
+  showAdvancedView: { key: 'brave.shields.advanced_view_enabled', type: chrome.settingsPrivate.PrefType.BOOLEAN },
+  statsBadgeVisible: { key: 'brave.shields.stats_badge_visible', type: chrome.settingsPrivate.PrefType.BOOLEAN },
 }
 export async function getViewPreferences (): Promise<GetViewPreferencesData> {
   const showAdvancedViewPref = await SettingsPrivate.getPreference(settingsKeys.showAdvancedView.key)
+  const statsBadgeVisiblePref = await SettingsPrivate.getPreference(settingsKeys.statsBadgeVisible.key)
+
   if (showAdvancedViewPref.type !== settingsKeys.showAdvancedView.type) {
     throw new Error(`Unexpected settings type received for "${settingsKeys.showAdvancedView.key}". Expected: ${settingsKeys.showAdvancedView.type}, Received: ${showAdvancedViewPref.type}`)
   }
+  if (statsBadgeVisiblePref.type !== settingsKeys.statsBadgeVisible.type) {
+    throw new Error(`Unexpected settings type received for "${settingsKeys.statsBadgeVisible.key}". Expected: ${settingsKeys.statsBadgeVisible.type}, Received: ${statsBadgeVisiblePref.type}`)
+  }
   return {
-    showAdvancedView: showAdvancedViewPref.value
+    showAdvancedView: showAdvancedViewPref.value,
+    statsBadgeVisible: statsBadgeVisiblePref.value
   }
 }
 
 export type SetViewPreferencesData = {
   showAdvancedView?: boolean
+  statsBadgeVisible?: boolean
 }
 export async function setViewPreferences (preferences: SetViewPreferencesData): Promise<void> {
   const setOps = []
   if (preferences.showAdvancedView !== undefined) {
     setOps.push(
       SettingsPrivate.setPreference(settingsKeys.showAdvancedView.key, preferences.showAdvancedView)
+    )
+  }
+  if (preferences.statsBadgeVisible !== undefined) {
+    setOps.push(
+      SettingsPrivate.setPreference(settingsKeys.statsBadgeVisible.key, preferences.statsBadgeVisible)
     )
   }
   await Promise.all(setOps)

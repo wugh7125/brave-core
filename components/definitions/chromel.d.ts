@@ -214,9 +214,11 @@ declare namespace chrome.braveShields {
 
   type BraveShieldsViewPreferences = {
     showAdvancedView: boolean
+    statsBadgeVisible: boolean
   }
   type BraveShieldsSetViewPreferencesData = {
     showAdvancedView?: boolean
+    statsBadgeVisible?: boolean
   }
 }
 

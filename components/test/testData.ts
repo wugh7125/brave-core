@@ -122,6 +122,11 @@ let mockSettings: MockSettingsStore = {
     key: 'brave.shields.advanced_view_enabled',
     type: 'BOOLEAN',
     value: false
+  },
+  ['brave.shields.stats_badge_visible']: {
+    key: 'brave.shields.stats_badge_visible',
+    type: 'BOOLEAN',
+    value: true
   }
 }
 

@@ -7,6 +7,7 @@ import * as deepFreeze from 'deep-freeze-node'
 import * as shieldsPanelState from '../../../brave_extension/extension/brave_extension/state/shieldsPanelState'
 import * as noScriptState from '../../../brave_extension/extension/brave_extension/state/noScriptState'
 import * as shieldsAPI from '../../../brave_extension/extension/brave_extension/background/api/shieldsAPI'
+import * as browserActionAPI from '../../../brave_extension/extension/brave_extension/background/api/browserActionAPI'
 
 const state: State = deepFreeze({
   currentWindowId: 1,
@@ -383,7 +384,7 @@ describe('shieldsPanelState test', () => {
   describe('updateShieldsIconBadgeText', () => {
     let spy: jest.SpyInstance
     beforeEach(() => {
-      spy = jest.spyOn(chrome.browserAction, 'setBadgeText')
+      spy = jest.spyOn(browserActionAPI, 'setBadgeText')
     })
     afterEach(() => {
       spy.mockRestore()
@@ -391,7 +392,7 @@ describe('shieldsPanelState test', () => {
     it('calls setBadgeText if tab exists', () => {
       shieldsPanelState.updateShieldsIconBadgeText(state)
       expect(spy).toHaveBeenCalled()
-      expect(spy.mock.calls[0][0]).toEqual({ tabId: 2, text: '' })
+      expect(spy.mock.calls[0][0]).toEqual(2)
     })
     it('does not call setBadgeText if tab does not exist', () => {
       const newState: State = deepFreeze({

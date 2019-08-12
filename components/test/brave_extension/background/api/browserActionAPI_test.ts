@@ -3,24 +3,28 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as browserActionAPI from '../../../../brave_extension/extension/brave_extension/background/api/browserActionAPI'
+import * as shieldsAPI from '../../../../brave_extension/extension/brave_extension/background/api/shieldsAPI'
 
 describe('BrowserAction API', () => {
   describe('setBadgeText', () => {
-    let spy: jest.SpyInstance
+    let getPreferencesSpy: jest.SpyInstance
+    let setBadgeTextSpy: jest.SpyInstance
     const text = '42'
     const tabId = 1337
     beforeEach(() => {
-      spy = jest.spyOn(chrome.browserAction, 'setBadgeText')
+      getPreferencesSpy = jest.spyOn(shieldsAPI, 'getViewPreferences')
+      setBadgeTextSpy = jest.spyOn(chrome.browserAction, 'setBadgeText')
       browserActionAPI.setBadgeText(tabId, text)
     })
     afterEach(() => {
-      spy.mockRestore()
+      getPreferencesSpy.mockRestore()
+      setBadgeTextSpy.mockRestore()
     })
-    it('calls chrome.browserAction.setBadgeText with the text', () => {
-      expect(spy).toHaveBeenCalled()
-      expect(spy.mock.calls[0][0]).toEqual({
-        tabId,
-        text
+    it('calls chrome.browserAction.setBadgeText with the text', (cb) => {
+      getPreferencesSpy().then(() => {
+        expect.assertions(1)
+        expect(setBadgeTextSpy).toBeCalledWith({ tabId, text })
+        cb()
       })
     })
   })

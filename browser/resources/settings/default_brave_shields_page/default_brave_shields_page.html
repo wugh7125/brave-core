@@ -38,6 +38,9 @@
          margin: 0 20px;
          cursor: pointer;
        }
+       .first-after-text {
+         border-top: 0;
+       }
     </style>
     <div class="settings-box first">
       <div class="flex">
@@ -129,6 +132,13 @@
         </template>
       </select>
     </div>
+    <div class="settings-box">
+      <div class="label shields-primary-title">$i18n{lookFeelTitle}</div>
+    </div>
+    <settings-toggle-button
+        class="first-after-text"
+        pref="{{prefs.brave.shields.stats_badge_visible}}"
+        label="$i18n{showStatsBlockedBadgeLabel}">
   </template>
   <script src="default_brave_shields_page.js"></script>
 </dom-module>

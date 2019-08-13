@@ -171,28 +171,29 @@ export const reportBrokenSite = (tabId: number) =>
   chrome.braveShields.reportBrokenSite(tabId)
 
 export type GetViewPreferencesData = {
-  showAdvancedView: boolean
-  statsBadgeVisible: boolean
+  showAdvancedView?: boolean
+  statsBadgeVisible?: boolean
 }
 
 const settingsKeys = {
   showAdvancedView: { key: 'brave.shields.advanced_view_enabled', type: chrome.settingsPrivate.PrefType.BOOLEAN },
-  statsBadgeVisible: { key: 'brave.shields.stats_badge_visible', type: chrome.settingsPrivate.PrefType.BOOLEAN },
+  statsBadgeVisible: { key: 'brave.shields.stats_badge_visible', type: chrome.settingsPrivate.PrefType.BOOLEAN }
 }
 export async function getViewPreferences (): Promise<GetViewPreferencesData> {
-  const showAdvancedViewPref = await SettingsPrivate.getPreference(settingsKeys.showAdvancedView.key)
-  const statsBadgeVisiblePref = await SettingsPrivate.getPreference(settingsKeys.statsBadgeVisible.key)
-
-  if (showAdvancedViewPref.type !== settingsKeys.showAdvancedView.type) {
-    throw new Error(`Unexpected settings type received for "${settingsKeys.showAdvancedView.key}". Expected: ${settingsKeys.showAdvancedView.type}, Received: ${showAdvancedViewPref.type}`)
-  }
-  if (statsBadgeVisiblePref.type !== settingsKeys.statsBadgeVisible.type) {
-    throw new Error(`Unexpected settings type received for "${settingsKeys.statsBadgeVisible.key}". Expected: ${settingsKeys.statsBadgeVisible.type}, Received: ${statsBadgeVisiblePref.type}`)
-  }
-  return {
-    showAdvancedView: showAdvancedViewPref.value,
-    statsBadgeVisible: statsBadgeVisiblePref.value
-  }
+  let newSettings: GetViewPreferencesData = {}
+  await Promise.all(
+    Object.keys(settingsKeys).map(async (name) => {
+      // Get setting by internal key
+      const pref = await SettingsPrivate.getPreference(settingsKeys[name].key)
+      // Validate setting type
+      if (pref.type !== settingsKeys[name].type) {
+        throw new Error(`Unexpected settings type received for "${settingsKeys[name].key}". Expected: ${settingsKeys[name].type}, Received: ${pref.type}`)
+      }
+      // Valid
+      newSettings[name] = pref.value
+    })
+  )
+  return newSettings
 }
 
 export type SetViewPreferencesData = {

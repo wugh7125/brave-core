@@ -30,7 +30,8 @@ import {
   requestShieldPanelData,
   setAllowScriptOriginsOnce,
   onShieldsPanelShown,
-  reportBrokenSite
+  reportBrokenSite,
+  getViewPreferences
 } from '../api/shieldsAPI'
 import { reloadTab } from '../api/tabsAPI'
 import { applySiteFilters } from '../api/cosmeticFilterAPI'
@@ -87,6 +88,13 @@ export default function shieldsPanelReducer (
       if (tab.active && tab.id) {
         state = shieldsPanelState.requestDataAndUpdateActiveTab(state, tab.windowId, tab.id)
         shieldsPanelState.updateShieldsIcon(state)
+        getViewPreferences()
+          .then((settings: chrome.braveShields.BraveShieldsViewPreferences) => {
+            if (state.persistentData.statsBadgeVisible === settings.statsBadgeVisible) {
+              state = shieldsPanelState.updatePersistentData(state, { statsBadgeVisible: settings.statsBadgeVisible })
+            }
+          })
+          .catch((error: any) => console.error('[Shields]: can\'t get preferences data', error))
       }
       break
     }

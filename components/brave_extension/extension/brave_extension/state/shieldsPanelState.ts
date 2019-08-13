@@ -129,8 +129,9 @@ export const updateShieldsIconBadgeText: shieldState.UpdateShieldsIconBadgeText 
   const tab: shieldState.Tab = state.tabs[tabId]
   if (tab) {
     const total = getTotalResourcesBlocked(tab)
+    const text: string = total > 99 ? '99+' : total > 0 ? total.toString() : ''
     // do not show any badge if there are no blocked items
-    setBadgeText(tabId, total > 99 ? '99+' : total > 0 ? total.toString() : '')
+    setBadgeText(tabId, text, state.persistentData.statsBadgeVisible)
   }
 }
 

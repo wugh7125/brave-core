@@ -40,6 +40,7 @@ export interface Windows {
 
 export interface PersistentData {
   isFirstAccess: boolean
+  statsBadgeVisible: boolean
 }
 
 export interface State {

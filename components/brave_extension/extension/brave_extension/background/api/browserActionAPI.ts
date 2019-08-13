@@ -3,7 +3,6 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { isHttpOrHttps } from '../../helpers/urlUtils'
-import { getViewPreferences } from './shieldsAPI'
 
 // TODO: use `import` for these assets once the webpack build
 // for brave extension allows dynamic file serving like other brave-core
@@ -48,17 +47,13 @@ export function init () {
  * Sets the badge text
  * @param {string} text - The text to put on the badge
  */
-export const setBadgeText = (tabId: number, text: string) => {
-  getViewPreferences()
-    .then((settings: chrome.braveShields.BraveShieldsViewPreferences) => {
-      if (chrome.browserAction) {
-        chrome.browserAction.setBadgeText({
-          tabId,
-          text: settings.statsBadgeVisible ? String(text) : ''
-        })
-      }
+export const setBadgeText = (tabId: number, text: string, statsBadgeVisible: boolean) => {
+  if (chrome.browserAction) {
+    chrome.browserAction.setBadgeText({
+      tabId,
+      text: statsBadgeVisible ? String(text) : ''
     })
-    .catch((error: any) => console.error('[Shields]: can\'t get preferences data', error))
+  }
 }
 
 /**

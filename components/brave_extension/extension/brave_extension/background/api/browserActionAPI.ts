@@ -47,11 +47,11 @@ export function init () {
  * Sets the badge text
  * @param {string} text - The text to put on the badge
  */
-export const setBadgeText = (tabId: number, text: string, statsBadgeVisible: boolean) => {
+export const setBadgeText = (tabId: number, text: string) => {
   if (chrome.browserAction) {
     chrome.browserAction.setBadgeText({
       tabId,
-      text: statsBadgeVisible ? String(text) : ''
+      text: String(text)
     })
   }
 }

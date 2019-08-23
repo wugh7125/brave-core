@@ -29,6 +29,10 @@ export const updatePersistentData: shieldState.UpdatePersistentData = (state, pe
   return { ...state, persistentData: { ...state.persistentData, ...persistentData } }
 }
 
+export const mergeSettingsData: shieldState.MergeSettingsData = (state, settingsData) => {
+  return { ...state.settingsData, settingsData }
+}
+
 export const updateActiveTab: shieldState.UpdateActiveTab = (state, windowId, tabId) => {
   let windows: shieldState.Windows = { ...state.windows } || {}
   windows[windowId] = tabId
@@ -129,9 +133,11 @@ export const updateShieldsIconBadgeText: shieldState.UpdateShieldsIconBadgeText 
   const tab: shieldState.Tab = state.tabs[tabId]
   if (tab) {
     const total = getTotalResourcesBlocked(tab)
-    const text: string = total > 99 ? '99+' : total > 0 ? total.toString() : ''
+    const text: string = state.settingsData.statsBadgeVisible
     // do not show any badge if there are no blocked items
-    setBadgeText(tabId, text, state.persistentData.statsBadgeVisible)
+    ? total > 99 ? '99+' : total > 0 ? total.toString() : ''
+    : ''
+    setBadgeText(tabId, text)
   }
 }
 

@@ -11,7 +11,7 @@ describe('BrowserAction API', () => {
     const tabId = 1337
     beforeEach(() => {
       spy = jest.spyOn(chrome.browserAction, 'setBadgeText')
-      browserActionAPI.setBadgeText(tabId, text, true)
+      browserActionAPI.setBadgeText(tabId, text)
     })
     afterEach(() => {
       spy.mockRestore()

@@ -4,6 +4,7 @@
 
 import { BlockOptions, BlockTypes, BlockFPOptions, BlockCookiesOptions } from '../other/blockTypes'
 import { NoScriptInfo } from '../other/noScriptInfo'
+import { SettingsData } from '../other/settingsTypes'
 
 export interface Tab {
   ads: BlockOptions
@@ -40,11 +41,11 @@ export interface Windows {
 
 export interface PersistentData {
   isFirstAccess: boolean
-  statsBadgeVisible: boolean
 }
 
 export interface State {
   persistentData: PersistentData
+  settingsData: SettingsData
   currentWindowId: number
   tabs: Tabs
   windows: Windows
@@ -64,6 +65,10 @@ export interface GetPersistentData {
 
 export interface UpdatePersistentData {
   (state: State, persistentData: Partial<PersistentData>): State
+}
+
+export interface MergeSettingsData {
+  (state: State, settingsData: SettingsData): SettingsData
 }
 
 export interface UpdateActiveTab {

@@ -5,7 +5,7 @@
 // Types
 import * as types from '../constants/settingsTypes'
 import * as actions from '../types/actions/settingsActions'
-import { SettingsOptions, OneOfSettings, SettingsData } from '../types/other/settingsTypes'
+import { SettingsOptions, GeneratedSettingsKey, SettingsData } from '../types/other/settingsTypes'
 
 // Helpers
 import * as shieldsAPI from '../background/api/shieldsAPI'
@@ -29,14 +29,8 @@ export const setStoreSettingsChange: actions.SetStoreSettingsChange = (settingsD
  */
 export const settingsDidChange: actions.SettingsDidChange = (settings) => {
   const settingsOptions: SettingsOptions = settingsUtils.settingsOptions
-  const currentSetting: Partial<OneOfSettings> = settingsOptions[settings.key]
-  return dispatch => {
-    shieldsAPI.setViewPreferences({ [currentSetting]: settings.value })
-      .then(
-        () => dispatch(setStoreSettingsChange({ [currentSetting]: settings.value })),
-        error => console.error('[Shields] error dispatching settings change', error)
-      )
-  }
+  const currentSetting: Partial<GeneratedSettingsKey> = settingsOptions[settings.key]
+  return setStoreSettingsChange({ [currentSetting]: settings.value })
 }
 
 /**

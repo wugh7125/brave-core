@@ -9,13 +9,17 @@ export type Settings = {
 }
 
 export type SettingsData = {
-  [key in OneOfSettings]: boolean
+  [key in GeneratedSettingsKey]: boolean
 }
 
 export type SettingsOptions = {
-  [key: string]: OneOfSettings
+  [key: string]: GeneratedSettingsKey
 }
 
-export type OneOfSettings =
+export type GeneratedSettingsKey =
   'showAdvancedView' |
   'statsBadgeVisible'
+
+export type SettingsKey =
+  'brave.shields.advanced_view_enabled' |
+  'brave.shields.stats_badge_visible'

@@ -179,8 +179,8 @@ const settingsKeys = {
   showAdvancedView: { key: 'brave.shields.advanced_view_enabled', type: chrome.settingsPrivate.PrefType.BOOLEAN },
   statsBadgeVisible: { key: 'brave.shields.stats_badge_visible', type: chrome.settingsPrivate.PrefType.BOOLEAN }
 }
-export async function getViewPreferences (): Promise<GetViewPreferencesData | {}> {
-  let newSettings = {}
+export async function getViewPreferences (): Promise<GetViewPreferencesData> {
+  let newSettings = {} as GetViewPreferencesData
   await Promise.all(
     Object.keys(settingsKeys).map(async (name) => {
       // Get setting by internal key

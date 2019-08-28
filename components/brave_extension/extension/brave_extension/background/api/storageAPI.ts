@@ -2,12 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import { debounce } from '../../../../../common/debounce'
+// Types
 import * as Shields from '../../types/state/shieldsPannelState'
+import { SettingsData } from '../../types/other/settingsTypes'
 
+// Helpers
+import { debounce } from '../../../../../common/debounce'
 const keyName = 'shields-persistent-data'
 
-export const initialSettingsData = {
+export const initialSettingsData: SettingsData = {
   showAdvancedView: false,
   statsBadgeVisible: true
 }

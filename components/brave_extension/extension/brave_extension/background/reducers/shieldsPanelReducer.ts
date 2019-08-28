@@ -297,7 +297,7 @@ export default function shieldsPanelReducer (
       break
     }
     case settingsTypes.SET_STORE_SETTINGS_CHANGE: {
-      const settingsData: SettingsData | Partial<SettingsData> = action.settingsData
+      const settingsData: Partial<SettingsData> = action.settingsData
       state = { ...state, settingsData: { ...state.settingsData, ...settingsData } }
       break
     }

@@ -11,10 +11,15 @@ chrome.webNavigation.onBeforeNavigate.addListener(function ({ tabId, url, frameI
   actions.onBeforeNavigate(tabId, url, isMainFrame)
 })
 
+let shouldRequestSettingsData = true
 chrome.webNavigation.onCommitted.addListener(function ({ tabId, url, frameId }: chrome.webNavigation.WebNavigationTransitionCallbackDetails) {
   const isMainFrame: boolean = frameId === 0
   actions.onCommitted(tabId, url, isMainFrame)
-  // check whether or not the settings store should update based on settings changes.
-  // this action is needed in the onCommitted phase for edge cases such as when after Brave is re-launched
-  settingsActions.settingsDataShouldUpdate()
+  if (shouldRequestSettingsData) {
+    // check whether or not the settings store should update based on settings changes.
+    // this action is needed in the onCommitted phase for edge cases such as when after Brave is re-launched
+    settingsActions.settingsDataShouldUpdate()
+    // this request only needs to perform once
+    shouldRequestSettingsData = false
+  }
 })

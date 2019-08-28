@@ -3,7 +3,13 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import settingsActions from '../actions/settingsActions'
+import { settingsKeyList } from '../../helpers/settingsUtils'
+import { SettingsKey } from '../../types/other/settingsTypes'
 
 chrome.settingsPrivate.onPrefsChanged.addListener(function (settings) {
-  settingsActions.settingsDidChange(settings[0])
+  const settingsKey = settings[0].key as SettingsKey
+  // only call the store update if the settings change is something we care about
+  if (settingsKeyList.includes(settingsKey)) {
+    settingsActions.settingsDidChange(settings[0])
+  }
 })

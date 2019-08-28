@@ -9,15 +9,15 @@ import { State } from '../state/mainState'
 
 interface SetStoreSettingsChangeReturn {
   type: typeof types.SET_STORE_SETTINGS_CHANGE,
-  settingsData: SettingsData | Partial<SettingsData>
+  settingsData: Partial<SettingsData>
 }
 
 export interface SetStoreSettingsChange {
-  (settingsData: SettingsData | Partial<SettingsData>): SetStoreSettingsChangeReturn
+  (settingsData: Partial<SettingsData>): SetStoreSettingsChangeReturn
 }
 
 export interface SettingsDidChange {
-  (settings: Settings): (dispatch: Dispatch) => void
+  (settings: Settings): SetStoreSettingsChangeReturn
 }
 
 export interface SettingsDataShouldUpdate {

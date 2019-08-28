@@ -32,7 +32,6 @@ import {
   requestShieldPanelData,
   onShieldsPanelShown,
   reportBrokenSite,
-  getViewPreferences,
   setAllowScriptOriginsOnce
 } from '../api/shieldsAPI'
 import { reloadTab } from '../api/tabsAPI'

@@ -724,8 +724,10 @@ void AdsImpl::OnPageLoaded(
     return;
   }
 
-  if (TestSearchState(url)) {
-    BLOG(INFO) << "Site visited " << url << ", URL is a search engine";
+  if (TestSearchState(url) &&
+      !SearchProviders::IsSearchEngineWithResultsPages(url)) {
+    BLOG(INFO) << "Site visited " << url
+        << ", URL is a search engine with no results pages";
     return;
   }
 

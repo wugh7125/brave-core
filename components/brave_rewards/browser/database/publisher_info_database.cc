@@ -105,6 +105,9 @@ bool PublisherInfoDatabase::Init() {
       base::Bind(&PublisherInfoDatabase::OnMemoryPressure,
       base::Unretained(this))));
 
+  // We need to enable foreign keys support on global scope for all tables
+  db->Execute("PRAGMA foreign_keys=1;");
+
   initialized_ = true;
   return initialized_;
 }
@@ -140,7 +143,12 @@ bool PublisherInfoDatabase::InsertContributionInfo(
       "type, month, year) "
       "VALUES (?, ?, ?, ?, ?, ?)"));
 
-  statement.BindString(0, info.publisher_key);
+  if (info.publisher_key.empty()) {
+    statement.BindNull(0);
+  } else {
+    statement.BindString(0, info.publisher_key);
+  }
+
   statement.BindString(1, info.probi);
   statement.BindInt64(2, info.date);
   statement.BindInt(3, info.type);

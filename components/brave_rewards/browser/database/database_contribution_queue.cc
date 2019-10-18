@@ -148,11 +148,6 @@ ledger::ContributionQueuePtr DatabaseContributionQueue::GetFirstRecord(
 bool DatabaseContributionQueue::DeleteRecord(
     sql::Database* db,
     const uint64_t id) {
-  if (!db->Execute("PRAGMA foreign_keys=1;")) {
-    LOG(ERROR) << "Error: deleting record for contribution queue with id" << id;
-    return false;
-  }
-
   const std::string query = base::StringPrintf(
       "DELETE FROM %s WHERE %s = ?",
       table_name_,
@@ -161,13 +156,7 @@ bool DatabaseContributionQueue::DeleteRecord(
   sql::Statement statement(db->GetUniqueStatement(query.c_str()));
   statement.BindInt64(0, id);
 
-  bool success = statement.Run();
-
-  if (!db->Execute("PRAGMA foreign_keys=0;")) {
-    return false;
-  }
-
-  return success;
+  return statement.Run();
 }
 
 }  // namespace brave_rewards

@@ -91,8 +91,8 @@ void BatAdsImpl::OnTimer(const uint32_t timer_id) {
   ads_->OnTimer(timer_id);
 }
 
-void BatAdsImpl::OnUnIdle() {
-  ads_->OnUnIdle();
+void BatAdsImpl::OnUnIdle(const uint64_t idle_time, const bool was_locked) {
+  ads_->OnUnIdle(idle_time, was_locked);
 }
 
 void BatAdsImpl::OnIdle() {

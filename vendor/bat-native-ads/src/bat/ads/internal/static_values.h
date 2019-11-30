@@ -21,6 +21,7 @@ namespace ads {
 #define CATALOG_PATH "/v2/catalog"
 
 const int kIdleThresholdInSeconds = 15;
+const int kMaximumIdleThresholdInSeconds = 120;
 
 const uint64_t kMaximumEntriesInPageScoreHistory = 5;
 const int kWinningCategoryCountForServingAds = 3;

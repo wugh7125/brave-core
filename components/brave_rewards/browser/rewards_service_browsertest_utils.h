@@ -3,31 +3,54 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef REWARDS_SERVICE_BROWSERTEST_UTILS_H_
-#define REWARDS_SERVICE_BROWSERTEST_UTILS_H_
+#ifndef BRAVE_COMPONENTS_BRAVE_REWARDS_BROWSER_REWARDS_SERVICE_BROWSERTEST_UTILS_H_
+#define BRAVE_COMPONENTS_BRAVE_REWARDS_BROWSER_REWARDS_SERVICE_BROWSERTEST_UTILS_H_
 
 #include <string>
 #include "build/build_config.h"
 
-
 namespace content {
 class WebContents;
-} // namespace content
+}  // namespace content
 
 namespace rewards_service_browsertest_utils {
 
-void WaitForElementToAppear(content::WebContents*,
+void WaitForElementToAppear(
+    content::WebContents* context,
+    const std::string& selector,
+    bool should_appear = true);
+
+void WaitForElementToEqual(
+    content::WebContents*,
+    const std::string& selector,
+    const std::string& expectedValue);
+
+void WaitForElementToContain(
+    content::WebContents* context,
+    const std::string& selector,
+    const std::string& substring);
+
+void WaitForElementToContainHTML(
+    content::WebContents* context,
+    const std::string& selector,
+    const std::string& html);
+
+void WaitForElementThenClick(
+    content::WebContents* context,
     const std::string& selector);
 
-void WaitForElementToEqual(content::WebContents*,
-    const std::string& selector, const std::string& expectedValue);
+std::string WaitForElementThenGetAttribute(
+    content::WebContents* context,
+    const std::string& selector,
+    const std::string& attribute_name);
 
-void WaitForElementToContain(content::WebContents*,
-    const std::string& selector, const std::string& substring);
+void DragAndDrop(
+    content::WebContents* context,
+    const std::string& drag_selector,
+    const std::string& drop_selector);
 
-void WaitForElementThenClick(content::WebContents*,
-    const std::string& selector);
+void IsMediaTipsInjected(content::WebContents* contents, bool should_appear);
 
-} // namespace rewards_service_browsertest_utils
+}  // namespace rewards_service_browsertest_utils
 
-#endif // REWARDS_SERVICE_BROWSERTEST_UTILS_H_
+#endif  // BRAVE_COMPONENTS_BRAVE_REWARDS_BROWSER_REWARDS_SERVICE_BROWSERTEST_UTILS_H_

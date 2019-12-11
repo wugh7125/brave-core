@@ -2566,9 +2566,12 @@ IN_PROC_BROWSER_TEST_F(BraveRewardsBrowserTest,
         browser(),
         uphold_auth_url(), 1);
 
+  LOG(ERROR) << "NEJC " << uphold_auth_url().spec();
+
   // Check if we are redirected to KYC page
   {
     const GURL current_url = contents()->GetURL();
+    LOG(ERROR) << "NEJC " << current_url.spec();
     ASSERT_TRUE(base::StartsWith(
         current_url.spec(),
         braveledger_uphold::GetUrl() + "/signup/step2",

@@ -24,6 +24,8 @@ import { getLocale } from '../../../../common/locale'
 import * as rewardsActions from '../actions/rewards_actions'
 import * as utils from '../utils'
 import WalletOff from '../../ui/components/walletOff'
+import { ExtendedActivityRow, SummaryItem } from '../../ui/components/modalActivity'
+import { DetailRow as TransactionRow } from '../../ui/components/tableTransactions'
 
 const clipboardCopy = require('clipboard-copy')
 
@@ -173,6 +175,10 @@ class PageWallet extends React.Component<Props, State> {
   }
 
   onModalActivityToggle = () => {
+    if (!this.state.modalActivity) {
+      this.actions.getMonthlyStatement(new Date().getMonth() + 1, new Date().getFullYear())
+    }
+
     this.setState({
       modalActivity: !this.state.modalActivity
     })
@@ -474,6 +480,118 @@ class PageWallet extends React.Component<Props, State> {
     ]
   }
 
+  getBalanceToken = (key: string) => {
+    const {
+      monthlyReport,
+      balance
+    } = this.props.rewardsData
+
+    let value = 0.0
+    if (monthlyReport && monthlyReport.balance && monthlyReport.balance[key]) {
+      value = monthlyReport.balance[key]
+    }
+
+    return {
+      value: value.toFixed(1),
+      converted: utils.convertBalance(value, balance.rates)
+    }
+  }
+
+  generateSummaryRows = (): SummaryItem[] => {
+    return [
+      {
+        type: 'grant',
+        token: this.getBalanceToken('grant')
+      },
+      {
+        type: 'ads',
+        token: this.getBalanceToken('ads')
+      },
+      {
+        type: 'contribute',
+        token: this.getBalanceToken('contribute')
+      },
+      {
+        type: 'monthly',
+        token: this.getBalanceToken('donation')
+      },
+      {
+        type: 'tip',
+        token: this.getBalanceToken('tips')
+      }
+    ]
+  }
+
+  generateActivityRows = (): ExtendedActivityRow[] => {
+    // TODO
+    return [
+      {
+        profile: {
+          name: 'Bart Baker',
+          verified: true,
+          provider: 'youtube',
+          src: ''
+        },
+        url: 'https://brave.com',
+        amount: {
+          tokens: '5.0',
+          converted: '5.00'
+        },
+        type: 'monthly'
+      }
+    ]
+  }
+
+  generateTransactionRows = (): TransactionRow[] => {
+    // TODO
+    return [
+      {
+        date: 1576066103000,
+        type: 'ads',
+        description: 'Brave Ads payment for May',
+        amount: {
+          value: '5.0',
+          converted: '5.00'
+        }
+      }
+    ]
+  }
+
+  generateMonthlyReport = () => {
+    const {
+      monthlyReport,
+      ui,
+      reconcileStamp
+    } = this.props.rewardsData
+
+    if (!monthlyReport || monthlyReport.year === -1 || monthlyReport.month === -1) {
+      return undefined
+    }
+
+    const paymentDay = new Intl.DateTimeFormat('default', { day: 'numeric' }).format(reconcileStamp * 1000)
+
+    const months = {
+      '12-2019': 'December 2019',
+      '11-2019': 'November 2019',
+      '10-2019': 'October 2019',
+      '9-2019': 'September 2019'
+    } // TODO
+
+    return (
+      <ModalActivity
+        onlyAnonWallet={ui.onlyAnonWallet}
+        summary={this.generateSummaryRows()}
+        activityRows={this.generateActivityRows()}
+        transactionRows={this.generateTransactionRows()}
+        months={months}
+        onClose={this.onModalActivityToggle}
+        onPrint={this.onModalActivityAction.bind('onPrint')}
+        onMonthChange={this.onModalActivityAction.bind('onMonthChange')}
+        paymentDay={parseInt(paymentDay, 10)}
+      />
+    )
+  }
+
   render () {
     const {
       recoveryKey,
@@ -561,85 +679,7 @@ class PageWallet extends React.Component<Props, State> {
         }
         {
           this.state.modalActivity
-            ? <ModalActivity
-              onlyAnonWallet={onlyAnonWallet}
-              activityRows={[
-                {
-                  profile: {
-                    name: 'Bart Baker',
-                    verified: true,
-                    provider: 'youtube',
-                    src: ''
-                  },
-                  url: 'https://brave.com',
-                  amount: {
-                    tokens: '5.0',
-                    converted: '5.00'
-                  },
-                  type: 'monthly'
-                }
-              ]}
-              transactionRows={[
-                {
-                  date: 1576066103000,
-                  type: 'ads',
-                  description: 'Brave Ads payment for May',
-                  amount: {
-                    value: '5.0',
-                    converted: '5.00'
-                  }
-                }
-              ]}
-              onClose={this.onModalActivityToggle}
-              onPrint={this.onModalActivityAction.bind('onPrint')}
-              onMonthChange={this.onModalActivityAction.bind('onMonthChange')}
-              months={{
-                'aug-2019': 'August 2019',
-                'jul-2019': 'July 2019',
-                'jun-2019': 'June 2019',
-                'may-2019': 'May 2019',
-                'apr-2019': 'April 2019'
-              }}
-              currentMonth={'aug-2019'}
-              summary={[
-                {
-                  type: 'grant',
-                  token: {
-                    value: '10.0',
-                    converted: '5.20'
-                  }
-                },
-                {
-                  type: 'ads',
-                  token: {
-                    value: '10.0',
-                    converted: '5.20'
-                  }
-                },
-                {
-                  type: 'contribute',
-                  token: {
-                    value: '10.0',
-                    converted: '5.20'
-                  }
-                },
-                {
-                  type: 'monthly',
-                  token: {
-                    value: '2.0',
-                    converted: '1.1'
-                  }
-                },
-                {
-                  type: 'tip',
-                  token: {
-                    value: '19.0',
-                    converted: '10.10'
-                  }
-                }
-              ]}
-              paymentDay={12}
-            />
+            ? this.generateMonthlyReport()
             : null
         }
       </>

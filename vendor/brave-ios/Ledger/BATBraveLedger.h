@@ -23,6 +23,8 @@ extern NSNotificationName const BATBraveLedgerNotificationAdded NS_SWIFT_NAME(Br
 NS_SWIFT_NAME(BraveLedger)
 @interface BATBraveLedger : NSObject
 
++ (NSString *)migrateString;
+
 @property (nonatomic, weak) BATBraveAds *ads;
 
 @property (nonatomic, copy, nullable) BATFaviconFetcher faviconFetcher;
@@ -31,6 +33,8 @@ NS_SWIFT_NAME(BraveLedger)
 - (instancetype)initWithStateStoragePath:(NSString *)path;
 
 - (instancetype)init NS_UNAVAILABLE;
+
+@property (nonatomic, readonly, getter=isInitialized) BOOL initialized;
 
 #pragma mark - Observers
 

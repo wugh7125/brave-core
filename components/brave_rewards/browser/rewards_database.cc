@@ -50,31 +50,30 @@ void HandleBinding(
 
 ledger::DBRecordPtr CreateRecord(
     sql::Statement* statement,
-    const std::vector<ledger::DBRecordBindingPtr>& bindings) {
+    const std::vector<ledger::DBCommand::RecordBindingType>& bindings) {
   auto record = ledger::DBRecord::New();
-
   int column = 0;
 
   for (auto const& binding : bindings) {
     auto value = ledger::DBValue::New();
-    switch (binding->type) {
-      case ledger::DBRecordBinding::Type::STRING_TYPE: {
+    switch (binding) {
+      case ledger::DBCommand::RecordBindingType::STRING_TYPE: {
         value->set_string_value(statement->ColumnString(column));
         break;
       }
-      case ledger::DBRecordBinding::Type::INT_TYPE: {
+      case ledger::DBCommand::RecordBindingType::INT_TYPE: {
         value->set_int_value(statement->ColumnInt(column));
         break;
       }
-      case ledger::DBRecordBinding::Type::INT64_TYPE: {
+      case ledger::DBCommand::RecordBindingType::INT64_TYPE: {
         value->set_int64_value(statement->ColumnInt64(column));
         break;
       }
-      case ledger::DBRecordBinding::Type::DOUBLE_TYPE: {
+      case ledger::DBCommand::RecordBindingType::DOUBLE_TYPE: {
         value->set_double_value(statement->ColumnDouble(column));
         break;
       }
-      case ledger::DBRecordBinding::Type::BOOL_TYPE: {
+      case ledger::DBCommand::RecordBindingType::BOOL_TYPE: {
         value->set_bool_value(statement->ColumnBool(column));
         break;
       }
@@ -137,7 +136,7 @@ void RewardsDatabase::RunTransaction(
         break;
       }
       case ledger::DBCommand::Type::READ: {
-        status = Query(command.get(), response);
+        status = Read(command.get(), response);
         break;
       }
       case ledger::DBCommand::Type::EXECUTE: {
@@ -245,7 +244,7 @@ ledger::DBCommandResponse::Status RewardsDatabase::Run(
   return ledger::DBCommandResponse::Status::OK;
 }
 
-ledger::DBCommandResponse::Status RewardsDatabase::Query(
+ledger::DBCommandResponse::Status RewardsDatabase::Read(
     ledger::DBCommand* command,
     ledger::DBCommandResponse* response) {
   if (!initialized_) {
@@ -274,6 +273,10 @@ ledger::DBCommandResponse::Status RewardsDatabase::Migrate(
     const int32_t version,
     const int32_t compatible_version) {
   if (!initialized_) {
+    return ledger::DBCommandResponse::Status::INITIALIZATION_ERROR;
+  }
+
+  if (!meta_table_.Init(&db_, version, compatible_version)) {
     return ledger::DBCommandResponse::Status::INITIALIZATION_ERROR;
   }
 

@@ -58,7 +58,7 @@ class MockLedgerImpl : public LedgerImpl {
 
   MOCK_METHOD1(SetPublisherInfo, void(ledger::PublisherInfoPtr));
 
-  MOCK_METHOD1(SetActivityInfo, void(ledger::PublisherInfoPtr));
+  MOCK_METHOD1(SaveActivityInfo, void(ledger::PublisherInfoPtr));
 
   MOCK_METHOD2(GetPublisherInfo,
       void(const std::string&, ledger::PublisherInfoCallback));
@@ -482,7 +482,7 @@ class MockLedgerImpl : public LedgerImpl {
           const std::vector<std::string>&));
 
   MOCK_METHOD2(DeleteActivityInfo,
-      void(const std::string&, ledger::DeleteActivityInfoCallback));
+      void(const std::string&, ledger::ResultCallback));
 
   MOCK_METHOD2(ClearAndInsertServerPublisherList,
       void(ledger::ServerPublisherInfoList,

@@ -177,16 +177,29 @@ ledger::DBCommandResponse::Status RewardsDatabase::Initialize(
     ledger::DBCommandResponse* response) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
+  int table_version = 0;
   if (!initialized_) {
-    if (!meta_table_.Init(&db_, version, compatible_version)) {
-      return ledger::DBCommandResponse::Status::INITIALIZATION_ERROR;
+    if (meta_table_.DoesTableExist(&db_)) {
+      if (!meta_table_.Init(&db_, version, compatible_version)) {
+        return ledger::DBCommandResponse::Status::INITIALIZATION_ERROR;
+      }
+
+      table_version = meta_table_.GetVersionNumber();
     }
 
     initialized_ = true;
     memory_pressure_listener_.reset(new base::MemoryPressureListener(
         base::Bind(&RewardsDatabase::OnMemoryPressure,
         base::Unretained(this))));
+  } else {
+    table_version = meta_table_.GetVersionNumber();
   }
+
+  auto value = ledger::DBValue::New();
+  value->set_int_value(table_version);
+  auto result = ledger::DBCommandResult::New();
+  result->set_value(std::move(value));
+  response->result = std::move(result);
 
   return ledger::DBCommandResponse::Status::OK;
 }

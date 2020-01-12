@@ -8,6 +8,7 @@
 
 #include "bat/ledger/internal/database/database_activity_info.h"
 #include "bat/ledger/internal/database/database_migration.h"
+#include "bat/ledger/internal/database/database_publisher_info.h"
 #include "bat/ledger/internal/database/database_util.h"
 #include "bat/ledger/internal/ledger_impl.h"
 
@@ -18,6 +19,7 @@ namespace braveledger_database {
 DatabaseMigration::DatabaseMigration(bat_ledger::LedgerImpl* ledger) :
     ledger_(ledger) {
   activity_info_ = std::make_unique<DatabaseActivityInfo>(ledger_);
+  publisher_info_ = std::make_unique<DatabasePublisherInfo>(ledger_);
 }
 
 DatabaseMigration::~DatabaseMigration() = default;
@@ -42,6 +44,9 @@ void DatabaseMigration::Start(
       break;
     }
 
+    BLOG(ledger_, ledger::LogLevel::LOG_INFO) <<
+    "DB: Migrated to version " << i;
+
     migrated_version = i;
   }
 
@@ -55,15 +60,17 @@ void DatabaseMigration::Start(
       _1,
       callback);
 
-  ledger_->RunDBTransaction(
-      std::move(transaction),
-      transaction_callback);
+  ledger_->RunDBTransaction(std::move(transaction), transaction_callback);
 }
 
 bool DatabaseMigration::Migrate(
     ledger::DBTransaction* transaction,
     const int target) {
   if (!activity_info_->Migrate(transaction, target)) {
+    return false;
+  }
+
+  if (!publisher_info_->Migrate(transaction, target)) {
     return false;
   }
 

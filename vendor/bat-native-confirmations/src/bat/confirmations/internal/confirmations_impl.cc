@@ -876,6 +876,13 @@ void ConfirmationsImpl::SetCatalogIssuers(std::unique_ptr<IssuersInfo> info) {
     catalog_issuers_.insert({issuer.public_key, issuer.name});
   }
 
+  if (public_key_was_rotated) {
+    unblinded_tokens_->RemoveAllTokens();
+    if (is_initialized_) {
+      RefillTokensIfNecessary();
+    }
+  }
+
   NotifyAdsIfConfirmationsIsReady();
 
   MaybeStart();

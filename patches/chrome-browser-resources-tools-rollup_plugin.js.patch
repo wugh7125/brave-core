@@ -1,51 +1,52 @@
 diff --git a/chrome/browser/resources/tools/rollup_plugin.js b/chrome/browser/resources/tools/rollup_plugin.js
-index e1942718e76890c5051923fc647f488c1801ca95..e2f8f42f5df82d7c8aebdd24a339b14c829394f5 100644
+index e1942718e76890c5051923fc647f488c1801ca95..c276588f6086137b6022d694fb00719f1dc9decc 100644
 --- a/chrome/browser/resources/tools/rollup_plugin.js
 +++ b/chrome/browser/resources/tools/rollup_plugin.js
-@@ -71,13 +71,29 @@ export default function plugin(srcPath, genPath, rootPath, host, excludes) {
-         return joinPaths(polymerSrcPath, pathFromPolymer);
+@@ -72,13 +72,14 @@ export default function plugin(srcPath, genPath, rootPath, host, excludes) {
        }
  
-+      //
-+      // NOTE (bsclifton): I realize this patch is horrible and I feel like a bad person
-+      //
-+
        // Get path from ui/webui/resources
 +      const braveResourcesUrl = 'chrome://brave-resources/'
-+      const braveResourcesSrcPath = joinPaths(srcPath, 'brave/ui/webui/resources/')
-+      const braveResourcesGenPath = joinPaths(genPath, 'brave/ui/webui/resources/')
-+      let pathFromBraveResources = ''
        let pathFromResources = '';
--      if (source.startsWith(chromeResourcesUrl)) {
-+      if (source.startsWith(braveResourcesUrl)) {
-+        pathFromBraveResources = source.slice(braveResourcesUrl.length)
-+      } else if (source.startsWith(chromeResourcesUrl)) {
+       if (source.startsWith(chromeResourcesUrl)) {
          pathFromResources = source.slice(chromeResourcesUrl.length);
 -      } else if (!!origin && origin.startsWith(resourcesSrcPath)) {
-+      } else if (!!origin && origin.startsWith(braveResourcesSrcPath)) {
-+        pathFromBraveResources =
-+            combinePaths(relativePath(braveResourcesSrcPath, origin), source);
-+      }  else if (!!origin && origin.startsWith(resourcesSrcPath)) {
++      } else if (!!origin && origin.startsWith(resourcesSrcPath) && source.indexOf(braveResourcesUrl) === -1) {
          pathFromResources =
              combinePaths(relativePath(resourcesSrcPath, origin), source);
-+      } else if (!!origin && origin.startsWith(braveResourcesGenPath)) {
-+        pathFromBraveResources =
-+            combinePaths(relativePath(braveResourcesGenPath, origin), source);
-       } else if (!!origin && origin.startsWith(resourcesGenPath)) {
+-      } else if (!!origin && origin.startsWith(resourcesGenPath)) {
++      } else if (!!origin && origin.startsWith(resourcesGenPath) && source.indexOf(braveResourcesUrl) === -1) {
          pathFromResources =
              combinePaths(relativePath(resourcesGenPath, origin), source);
-@@ -96,6 +112,21 @@ export default function plugin(srcPath, genPath, rootPath, host, excludes) {
+       }
+@@ -96,6 +97,37 @@ export default function plugin(srcPath, genPath, rootPath, host, excludes) {
              pathFromResources);
        }
  
++      const braveResourcesSrcPath = joinPaths(srcPath, 'brave/ui/webui/resources/')
++      const braveResourcesGenPath = joinPaths(genPath, 'brave/ui/webui/resources/')
++      let pathFromBraveResources = ''
++      if (source.startsWith(braveResourcesUrl)) {
++        pathFromBraveResources = source.slice(braveResourcesUrl.length)
++      } else if (!!origin && origin.startsWith(braveResourcesSrcPath)) {
++        pathFromBraveResources =
++            combinePaths(relativePath(braveResourcesSrcPath, origin), source);
++      } else if (!!origin && origin.startsWith(braveResourcesGenPath)) {
++        pathFromBraveResources =
++            combinePaths(relativePath(braveResourcesGenPath, origin), source);
++      }
++
 +      // Add prefix (Brave specific)
 +      if (pathFromBraveResources) {
-+        // const fullPath = chromeResourcesUrl + pathFromBraveResources;
-+        // if (excludes.includes(fullPath)) {
-+        //   return {id: fullPath, external: true};
-+        // }
-+        // const filename = path.basename(source);
-+
++        const fullPath = chromeResourcesUrl + pathFromBraveResources;
++        if (excludes.includes(fullPath)) {
++          return {id: fullPath, external: true};
++        }
++        // cr.m.js, etc.
++        const filename = path.basename(source);
++        if (nonGeneratedFiles.includes(filename)) {
++          return joinPaths(resourcesSrcPath, pathFromBraveResources);
++        }
 +        // JS compiled into gen directory
 +        if (pathFromBraveResources.endsWith('.js')) {
 +          return joinPaths(braveResourcesGenPath, pathFromBraveResources);

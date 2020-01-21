@@ -17,7 +17,6 @@ polymer_modulizer("br_toolbar_search_field") {
 }
 
 js_modulizer("modulize") {
-  # input_files = [ "../../../../../../ui/webui/resources/cr_elements/cr_search_field/cr_toolbar_search_field.js" ]
-  input_files = [ "//ui/webui/resources/cr_elements/cr_search_field/cr_toolbar_search_field.js" ]
+  input_files = [ "../../../../../../ui/webui/resources/cr_elements/cr_search_field/cr_search_field_behavior.js" ]
   deps = []
 }

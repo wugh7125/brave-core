@@ -7,7 +7,7 @@ grit("resources") {
   defines = [ "optimize_webui=$optimize_webui" ]
   source = "brave_webui_resources.grd"
 
-  deps = [ ":modulize", ":closure_compile" ]
+  deps = [ ":modulize" ]
 
   # The .grd contains references to generated files.
   source_is_generated = true
@@ -24,12 +24,6 @@ grit("resources") {
   grit_flags = [
     "-E",
     "root_gen_dir=" + rebase_path(root_gen_dir, root_build_dir),
-  ]
-}
-
-group("closure_compile") {
-  deps = [
-    "br_elements:closure_compile",
   ]
 }
 

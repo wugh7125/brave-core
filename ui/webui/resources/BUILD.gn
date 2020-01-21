@@ -1,12 +1,13 @@
 import("//tools/grit/grit_rule.gni")
 import("//ui/webui/webui_features.gni")
 import("//tools/polymer/polymer.gni")
+import("//third_party/closure_compiler/compile_js.gni")
 
 grit("resources") {
   defines = [ "optimize_webui=$optimize_webui" ]
   source = "brave_webui_resources.grd"
 
-  deps = [ ":modulize" ]
+  deps = [ ":modulize", ":closure_compile" ]
 
   # The .grd contains references to generated files.
   source_is_generated = true
@@ -23,6 +24,12 @@ grit("resources") {
   grit_flags = [
     "-E",
     "root_gen_dir=" + rebase_path(root_gen_dir, root_build_dir),
+  ]
+}
+
+group("closure_compile") {
+  deps = [
+    "br_elements:closure_compile",
   ]
 }
 

@@ -1,4 +1,11 @@
 import("//tools/polymer/polymer.gni")
+import("//third_party/closure_compiler/compile_js.gni")
+
+group("closure_compile") {
+  deps = [
+    "br_toolbar:closure_compile"
+  ]
+}
 
 # Targets for auto-generating Polymer 3 JS Modules.
 
@@ -10,6 +17,7 @@ polymer_modulizer("shared_vars_css") {
 
 group("polymer3_elements") {
   deps = [
+    "//ui/webui/resources/cr_elements/cr_search_field:cr_search_field_behavior",
     "br_toolbar:br_toolbar_module",
     "br_toolbar:br_toolbar_search_field_module",
     ":shared_vars_css_module",

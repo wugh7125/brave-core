@@ -1,6 +1,25 @@
 import("//third_party/closure_compiler/compile_js.gni")
 import("//tools/polymer/polymer.gni")
 
+js_type_check("closure_compile") {
+  deps = [
+    ":br_toolbar",
+    ":br_toolbar_search_field",
+  ]
+}
+
+js_library("br_toolbar_search_field") {
+  deps = [
+    "//ui/webui/resources/cr_elements/cr_search_field:cr_search_field_behavior",
+  ]
+}
+
+js_library("br_toolbar") {
+  deps = [
+    ":br_toolbar_search_field"
+  ]
+}
+
 # Targets for auto-generating and typechecking Polymer 3 JS modules
 
 polymer_modulizer("br_toolbar") {
@@ -13,4 +32,5 @@ polymer_modulizer("br_toolbar_search_field") {
   js_file = "br_toolbar_search_field.js"
   html_file = "br_toolbar_search_field.html"
   html_type = "dom-module"
+  auto_imports = [ "../../../../../../ui/webui/resources/cr_elements/cr_search_field/cr_search_field_behavior.html|CrSearchFieldBehavior" ]
 }

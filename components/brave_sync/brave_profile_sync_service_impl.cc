@@ -486,7 +486,7 @@ void BraveProfileSyncServiceImpl::OnSyncReady() {
     ProfileSyncService::GetUserSettings()->SetSyncRequested(true);
   }
 
-  BraveMigrateOtherNode(model_);
+  BraveMigrateOtherNodeFolder(model_);
 }
 
 syncer::ModelTypeSet BraveProfileSyncServiceImpl::GetPreferredDataTypes()

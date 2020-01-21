@@ -9,7 +9,7 @@
 #include "../../../../../components/bookmarks/browser/bookmark_model.h"
 
 namespace bookmarks {
-void BraveMigrateOtherNode(BookmarkModel* model);
+void BraveMigrateOtherNodeFolder(BookmarkModel* model);
 }  // namespace bookmarks
 
 #endif  // BRAVE_CHROMIUM_SRC_COMPONENTS_BOOKMARKS_BROWSER_BOOKMARK_MODEL_H_

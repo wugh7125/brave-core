@@ -14,6 +14,7 @@ group("polymer3_elements") {
     "br_toolbar:br_toolbar_search_field_module",
     "br_toolbar:modulize",
     ":shared_vars_css_module",
-    "//ui/webui/resources/cr_elements/cr_search_field:modulize",
+    #"br_toolbar:cr_search_field_behavior_module",
+    "//ui/webui/resources/cr_elements/cr_search_field:cr_search_field_behavior_module",
   ]
 }

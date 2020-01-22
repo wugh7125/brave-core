@@ -149,6 +149,7 @@ source_set("core") {
     "//components/bookmarks/browser",
     "//crypto",
     "//extensions/buildflags",
+    "//ui/base",
   ]
 }
 

@@ -54,7 +54,6 @@ class Database {
   /**
    * PUBLISHER INFO
    */
-
   void SavePublisherInfo(
       ledger::PublisherInfoPtr publisher_info,
       ledger::ResultCallback callback);

@@ -5,6 +5,7 @@ script/uplift.py @bsclifton
 vendor/brave-ios/ @kylehickinson
 /README.md @bsclifton
 Jenkinsfile @mihaiplesa
+/ts* @petemill
 
 # Rewards
 vendor/bat-native-ledger/ @NejcZdovc
@@ -40,6 +41,21 @@ browser/widevine @simonhong
 # Wayback machine
 browser/ui/views/infobars/brave_wayback_machine_* @simonhong
 components/brave_wayback_machine @simonhong
+
+# WebUI
+/components/*_ui/ @petemill @cezaraugusto
+/components/brave_extension/ @cezaraugusto @petemill
+/components/brave_sync/extension/ @cezaraugusto
+/browser/resources/ @petemill
+/ui/webui/ @petemill
+/browser/ui/webui/ @petemill
+
+# Native UI
+/browser/ui/views/ @petemill
+/browser/ui/brave_actions/ @petemill
+/browser/ui/toolbar/ @petemill
+/browser/ui/brave_layout_constants.* @petemill
+/ui/base/
 
 # Licensing of third-party components
 common/licenses/ @fmarier

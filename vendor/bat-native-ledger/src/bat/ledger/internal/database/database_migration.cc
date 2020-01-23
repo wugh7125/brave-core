@@ -9,6 +9,7 @@
 #include "bat/ledger/internal/database/database_activity_info.h"
 #include "bat/ledger/internal/database/database_migration.h"
 #include "bat/ledger/internal/database/database_publisher_info.h"
+#include "bat/ledger/internal/database/database_recurring_tip.h"
 #include "bat/ledger/internal/database/database_server_publisher_info.h"
 #include "bat/ledger/internal/database/database_util.h"
 #include "bat/ledger/internal/ledger_impl.h"
@@ -21,6 +22,7 @@ DatabaseMigration::DatabaseMigration(bat_ledger::LedgerImpl* ledger) :
     ledger_(ledger) {
   activity_info_ = std::make_unique<DatabaseActivityInfo>(ledger_);
   publisher_info_ = std::make_unique<DatabasePublisherInfo>(ledger_);
+  recurring_tip_ = std::make_unique<DatabaseRecurringTip>(ledger_);
   server_publisher_info_ =
       std::make_unique<DatabaseServerPublisherInfo>(ledger_);
 }
@@ -74,6 +76,10 @@ bool DatabaseMigration::Migrate(
   }
 
   if (!publisher_info_->Migrate(transaction, target)) {
+    return false;
+  }
+
+  if (!recurring_tip_->Migrate(transaction, target)) {
     return false;
   }
 

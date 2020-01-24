@@ -1714,7 +1714,7 @@ class BraveRewardsBrowserTest
   brave_ads::AdsServiceImpl* ads_service_;
 
   std::unique_ptr<brave_ads::LocaleHelperMock> locale_helper_mock_;
-  const std::string newly_supported_locale_ = "cs_CZ";
+  const std::string newly_supported_locale_ = "en_MH";
 
   std::unique_ptr<brave_ads::NotificationHelperMock> notification_helper_mock_;
 

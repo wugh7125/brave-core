@@ -9,6 +9,7 @@ union DBValue {
   double double_value;
   bool bool_value;
   string string_value;
+  int8 null_value;
 };
 
 struct DBCommandBinding {

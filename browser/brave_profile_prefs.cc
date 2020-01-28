@@ -193,6 +193,9 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   // Autocomplete in address bar
   registry->RegisterBooleanPref(kAutocompleteEnabled, true);
 
+// Restore "Other Bookmarks" migration
+  registry->RegisterBooleanPref(kOtherBookmarksMigrated, false);
+
   RegisterProfilePrefsForMigration(registry);
 }
 

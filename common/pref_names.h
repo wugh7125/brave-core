@@ -66,6 +66,7 @@ extern const char kAlwaysShowBookmarkBarOnNTP[];
 extern const char kRemoteDebuggingEnabled[];
 extern const char kAutocompleteEnabled[];
 extern const char kBraveDarkMode[];
+extern const char kOtherBookmarksMigrated[];
 
 #if defined(OS_ANDROID)
 extern const char kDesktopModeEnabled[];

@@ -1,5 +1,5 @@
 diff --git a/chrome/installer/mac/signing/signing.py b/chrome/installer/mac/signing/signing.py
-index 18a73509f528e67c29c7ef896eee338e0970b4fa..117f2b88a4322448a4c0bdda797dd7f5d110a35d 100644
+index 18a73509f528e67c29c7ef896eee338e0970b4fa..898af6df3915f5770d0e7575eb747c4d14822f13 100644
 --- a/chrome/installer/mac/signing/signing.py
 +++ b/chrome/installer/mac/signing/signing.py
 @@ -11,6 +11,7 @@ import os.path
@@ -27,7 +27,16 @@ index 18a73509f528e67c29c7ef896eee338e0970b4fa..117f2b88a4322448a4c0bdda797dd7f5
      if config.notary_user:
          # Assume if the config has notary authentication information that the
          # products will be notarized, which requires a secure timestamp.
-@@ -270,6 +272,7 @@ def sign_chrome(paths, config, sign_framework=False):
+@@ -190,6 +192,8 @@ def sign_part(paths, config, part):
+     reqs = part.requirements_string(config)
+     if reqs:
+         command.extend(['--requirements', '=' + reqs])
++    if config.keychain:
++        command.extend(['--keychain', config.keychain])
+     if part.options:
+         command.extend(['--options', ','.join(part.options)])
+     if part.entitlements:
+@@ -270,6 +274,7 @@ def sign_chrome(paths, config, sign_framework=False):
                  continue
              sign_part(paths, config, part)
  

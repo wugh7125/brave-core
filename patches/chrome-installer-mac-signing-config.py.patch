@@ -1,8 +1,54 @@
 diff --git a/chrome/installer/mac/signing/config.py b/chrome/installer/mac/signing/config.py
-index 2518e74e6a94142f0c2703a979407be3e62910f8..4ec18f119af9edfb25d97dfb98b885528e49343f 100644
+index 2518e74e6a94142f0c2703a979407be3e62910f8..5c6fe8062031480b5962f2d4bd3294296839a845 100644
 --- a/chrome/installer/mac/signing/config.py
 +++ b/chrome/installer/mac/signing/config.py
-@@ -201,4 +201,4 @@ class CodeSignConfig(object):
+@@ -32,12 +32,13 @@ class CodeSignConfig(object):
+     def __init__(self,
+                  identity,
+                  installer_identity=None,
++                 keychain=None,
+                  notary_user=None,
+                  notary_password=None,
+                  notary_asc_provider=None):
+         """Creates a CodeSignConfig that will sign the product using the static
+         properties on the class, using the code signing identity passed to the
+-        constructor.
++        constructor, which is found in the specified keychain.
+ 
+         Args:
+             identity: The name of the code signing identity to use for non-PKG
+@@ -50,6 +51,8 @@ class CodeSignConfig(object):
+                 hash is not a valid option, as it is for |identity| above. The
+                 common name of the cert will work. If there is any distribution
+                 that is packaged in a PKG this must not be None.
++            keychain: Optional path to the keychain file, in which the signing
++                |identity| will be searched for.
+             notary_user: Optional string username that will be used to
+                 authenticate to Apple's notary service if notarizing.
+             notary_password: Optional string password or password reference
+@@ -62,6 +65,7 @@ class CodeSignConfig(object):
+         assert identity
+         self._identity = identity
+         self._installer_identity = installer_identity
++        self._keychain = keychain
+         self._notary_user = notary_user
+         self._notary_password = notary_password
+         self._notary_asc_provider = notary_asc_provider
+@@ -80,6 +84,13 @@ class CodeSignConfig(object):
+         """
+         return self._installer_identity
+ 
++    @property
++    def keychain(self):
++        """Returns the filename of the keychain in which |identity| will be
++        searched for. May be None.
++        """
++        return self._keychain
++
+     @property
+     def notary_user(self):
+         """Returns the username for authenticating to Apple's notary service."""
+@@ -201,4 +212,4 @@ class CodeSignConfig(object):
      @property
      def packaging_dir(self):
          """Returns the path to the packaging and installer tools."""

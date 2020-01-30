@@ -1,5 +1,5 @@
 diff --git a/chrome/installer/mac/sign_chrome.py b/chrome/installer/mac/sign_chrome.py
-index db35e6560b8a20d72414250649dac6873fd71022..07145d7e2d467bf15d97c8a7ca97e34366ef8494 100755
+index db35e6560b8a20d72414250649dac6873fd71022..86698dca234f633c97b9d4e0d37431d0ad8a5a01 100755
 --- a/chrome/installer/mac/sign_chrome.py
 +++ b/chrome/installer/mac/sign_chrome.py
 @@ -44,6 +44,7 @@ def create_config(config_args, development):
@@ -27,3 +27,24 @@ index db35e6560b8a20d72414250649dac6873fd71022..07145d7e2d467bf15d97c8a7ca97e343
      return config_class(*config_args)
  
  
+@@ -87,6 +91,8 @@ def _show_tool_versions():
+ def main():
+     parser = argparse.ArgumentParser(
+         description='Code sign and package Chrome for channel distribution.')
++    parser.add_argument(
++        '--keychain', help='The keychain to load the identity from.')
+     parser.add_argument(
+         '--identity',
+         required=True,
+@@ -154,8 +160,9 @@ def main():
+                          'are required with --notarize.')
+ 
+     config = create_config(
+-        (args.identity, args.installer_identity, args.notary_user,
+-         args.notary_password, args.notary_asc_provider), args.development)
++        (args.identity, args.installer_identity, args.keychain,
++         args.notary_user, args.notary_password, args.notary_asc_provider),
++         args.development)
+     paths = model.Paths(args.input, args.output, None)
+ 
+     if not os.path.exists(paths.output):

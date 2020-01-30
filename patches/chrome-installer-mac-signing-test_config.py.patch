@@ -1,0 +1,20 @@
+diff --git a/chrome/installer/mac/signing/test_config.py b/chrome/installer/mac/signing/test_config.py
+index 6d1af77e41b87e6cc9eab1e2dcd4ea5f9e3cf6b5..902942c0878e3614ae5a8cd5859e47c7a5298545 100644
+--- a/chrome/installer/mac/signing/test_config.py
++++ b/chrome/installer/mac/signing/test_config.py
+@@ -10,12 +10,13 @@ class TestConfig(config.CodeSignConfig):
+     def __init__(self,
+                  identity='[IDENTITY]',
+                  installer_identity='[INSTALLER-IDENTITY]',
++                 keychain='[KEYCHAIN]',
+                  notary_user='[NOTARY-USER]',
+                  notary_password='[NOTARY-PASSWORD]',
+                  notary_asc_provider=None):
+         super(TestConfig,
+-              self).__init__(identity, installer_identity, notary_user,
+-                             notary_password, notary_asc_provider)
++              self).__init__(identity, installer_identity, keychain,
++                             notary_user, notary_password, notary_asc_provider)
+ 
+     @property
+     def app_product(self):

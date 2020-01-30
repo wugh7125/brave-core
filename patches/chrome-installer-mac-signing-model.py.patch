@@ -1,7 +1,18 @@
 diff --git a/chrome/installer/mac/signing/model.py b/chrome/installer/mac/signing/model.py
-index d3dbdbe7a636cf8b46629e3fa2369fc778192e95..34ce73fcb5b543db39e71078f61d7fca411f8838 100644
+index d3dbdbe7a636cf8b46629e3fa2369fc778192e95..3b3d9884f7fabd63953aa4c206753a3876444088 100644
 --- a/chrome/installer/mac/signing/model.py
 +++ b/chrome/installer/mac/signing/model.py
+@@ -266,8 +266,8 @@ class Distribution(object):
+ 
+         return DistributionCodeSignConfig(
+             base_config.identity, base_config.installer_identity,
+-            base_config.notary_user, base_config.notary_password,
+-            base_config.notary_asc_provider)
++            base_config.keychain, base_config.notary_user,
++            base_config.notary_password, base_config.notary_asc_provider)
+ 
+ 
+ class Paths(object):
 @@ -305,7 +305,7 @@ class Paths(object):
          Returns:
              Path to the packaging directory.

@@ -1,0 +1,13 @@
+diff --git a/chrome/installer/mac/notarize_thing.py b/chrome/installer/mac/notarize_thing.py
+index f19cb5dcb918e4a8727f3906a1884d5cf307f74b..de893aad5b85dc807593dcdac7aafd004d1011af 100755
+--- a/chrome/installer/mac/notarize_thing.py
++++ b/chrome/installer/mac/notarize_thing.py
+@@ -63,7 +63,7 @@ def main():
+ 
+         config_class = OverrideBundleIDConfig
+ 
+-    config = config_class('notused', 'notused', args.user, args.password,
++    config = config_class('notused', 'notused', None, args.user, args.password,
+                           args.asc_provider)
+ 
+     uuids = []

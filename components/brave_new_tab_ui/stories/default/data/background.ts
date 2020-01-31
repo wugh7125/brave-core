@@ -47,7 +47,7 @@ export const images = [
   {
     'source': Image6,
     'author': 'Ben Karpinski',
-    'link': 'https://www.benkarpinski.com/landscapes'
+    'link': 'http://bklandscapes.com'
   },
   {
     'source': Image7,

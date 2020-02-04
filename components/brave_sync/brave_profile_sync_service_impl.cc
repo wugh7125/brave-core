@@ -211,6 +211,8 @@ void BraveProfileSyncServiceImpl::OnNudgeSyncCycle(RecordsListPtr records) {
 
   for (auto& record : *records) {
     record->deviceId = brave_sync_prefs_->GetThisDeviceId();
+    CheckOtherBookmarkRecord(record.get());
+    CheckOtherBookmarkChildRecord(record.get());
   }
   if (!records->empty()) {
     SendSyncRecords(jslib_const::SyncRecordType_BOOKMARKS, std::move(records));
@@ -703,8 +705,8 @@ void BraveProfileSyncServiceImpl::SetPermanentNodesOrder(
   order.clear();
   model_->other_node()->GetMetaInfo("order", &order);
   if (order.empty()) {
-    tools::AsMutable(model_->other_node())
-      ->SetMetaInfo("order", base_order + "2");
+    tools::AsMutable(model_->other_node())->SetMetaInfo("order",
+                                                        tools::kOtherNodeOrder);
   }
   brave_sync_prefs_->SetMigratedBookmarksVersion(2);
 }
@@ -829,6 +831,14 @@ void BraveProfileSyncServiceImpl::ProcessOtherBookmarksFolder(
     tools::AsMutable(model_->other_node())->SetMetaInfo("object_id",
                                                         record->objectId);
   } else {
+    // If late joined desktop has bookmarks in other_node before joing sync
+    // chain
+    if (other_node_object_id != record->objectId &&
+        other_node_object_id ==
+          tools::GenerateObjectIdForOtherNode(std::string())) {
+      tools::AsMutable(model_->other_node())->SetMetaInfo("object_id",
+                                                          record->objectId);
+    }
     // DELETE won't reach here, because [DELETE, null] => [] in
     // resolve-sync-objects but children records will go through. And we don't
     // need to regenerate new object id for it.
@@ -876,6 +886,33 @@ void BraveProfileSyncServiceImpl::ProcessOtherBookmarksChildren(
   if (model_->other_node()->GetMetaInfo("object_id", &other_node_object_id) &&
       record->GetBookmark().parentFolderObjectId == other_node_object_id) {
     record->mutable_bookmark()->hideInToolbar = true;
+  }
+}
+void BraveProfileSyncServiceImpl::CheckOtherBookmarkRecord(
+    jslib::SyncRecord* record) {
+  if (!IsOtherBookmarksFolder(record))
+    return;
+  // Check if record has latest object id before sending
+  std::string other_node_object_id;
+  if (!model_->other_node()->GetMetaInfo("object_id", &other_node_object_id)) {
+    // first iteration
+    other_node_object_id = tools::GenerateObjectIdForOtherNode(std::string());
+    tools::AsMutable(model_->other_node())->SetMetaInfo("object_id",
+                                                        other_node_object_id);
+  }
+  DCHECK(!other_node_object_id.empty());
+  if (record->objectId != other_node_object_id)
+    record->objectId = other_node_object_id;
+}
+
+void BraveProfileSyncServiceImpl::CheckOtherBookmarkChildRecord(
+    jslib::SyncRecord* record) {
+  if (record->GetBookmark().hideInToolbar &&
+      record->GetBookmark().parentFolderObjectId.empty()) {
+    std::string other_node_object_id;
+    model_->other_node()->GetMetaInfo("object_id", &other_node_object_id);
+    DCHECK(!other_node_object_id.empty());
+    record->mutable_bookmark()->parentFolderObjectId = other_node_object_id;
   }
 }
 

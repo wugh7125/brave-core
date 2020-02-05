@@ -9,8 +9,11 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "base/bind.h"
+#include "base/json/json_writer.h"
+#include "base/json/json_string_value_serializer.h"
 #include "base/strings/string_number_conversions.h"
 #include "brave/browser/brave_rewards/tip_dialog.h"
 #include "brave/browser/extensions/api/brave_action_api.h"
@@ -1132,6 +1135,82 @@ BraveRewardsGetAdsSupportedFunction::Run() {
   const bool supported = ads_service_->IsSupportedLocale();
   return RespondNow(
       OneArgument(std::make_unique<base::Value>(supported)));
+}
+
+BraveRewardsGetPublisherAdsFunction::
+~BraveRewardsGetPublisherAdsFunction() = default;
+
+ExtensionFunction::ResponseAction
+BraveRewardsGetPublisherAdsFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  AdsService* ads_service_ =
+      AdsServiceFactory::GetForProfile(profile);
+
+  if (!ads_service_) {
+    return RespondNow(Error("Ads service is not initialized"));
+  }
+
+  std::unique_ptr<brave_rewards::GetPublisherAds::Params> params(
+      brave_rewards::GetPublisherAds::Params::Create(*args_));
+
+  if (ads_service_->GetPublisherAds(params->url, params->sizes, base::Bind(
+      &BraveRewardsGetPublisherAdsFunction::OnGetPublisherAds,
+      this))) {
+    return RespondLater();
+  }
+
+  return RespondNow(Error("Ads service could not provide an answer"));
+}
+
+void BraveRewardsGetPublisherAdsFunction::OnGetPublisherAds(
+    const std::string& url, const std::vector<std::string>& sizes,
+    const base::ListValue& ads) {
+  Respond(OneArgument(ads.CreateDeepCopy()));
+}
+
+BraveRewardsTriggerPublisherAdViewedFunction::
+~BraveRewardsTriggerPublisherAdViewedFunction() = default;
+
+ExtensionFunction::ResponseAction
+BraveRewardsTriggerPublisherAdViewedFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  AdsService* ads_service_ =
+      AdsServiceFactory::GetForProfile(profile);
+
+  if (!ads_service_) {
+    return RespondNow(Error("Ads service is not initialized"));
+  }
+
+  std::unique_ptr<brave_rewards::TriggerPublisherAdViewed::Params> params(
+      brave_rewards::TriggerPublisherAdViewed::Params::Create(*args_));
+
+  std::string json;
+  base::JSONWriter::Write(*(params->publisher_ad_info.ToValue()), &json);
+  ads_service_->OnPublisherAdEvent(json, 2);
+
+  return RespondNow(NoArguments());
+}
+
+BraveRewardsTriggerPublisherAdInteractedFunction::
+~BraveRewardsTriggerPublisherAdInteractedFunction() = default;
+
+ExtensionFunction::ResponseAction
+BraveRewardsTriggerPublisherAdInteractedFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  AdsService* ads_service_ =
+      AdsServiceFactory::GetForProfile(profile);
+
+  if (!ads_service_) {
+    return RespondNow(Error("Ads service is not initialized"));
+  }
+
+  std::unique_ptr<brave_rewards::TriggerPublisherAdInteracted::Params> params(
+      brave_rewards::TriggerPublisherAdInteracted::Params::Create(*args_));
+  std::string json;
+  base::JSONWriter::Write(*(params->publisher_ad_info.ToValue()), &json);
+  ads_service_->OnPublisherAdEvent(json, 1);
+
+  return RespondNow(NoArguments());
 }
 
 BraveRewardsGetAnonWalletStatusFunction::

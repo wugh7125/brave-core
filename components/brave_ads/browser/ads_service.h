@@ -100,7 +100,7 @@ class AdsService : public KeyedService {
       const uint64_t to_timestamp,
       OnGetAdsHistoryCallback callback) = 0;
 
-  virtual void GetPublisherAds(
+  virtual bool GetPublisherAds(
       const std::string& url,
       const std::vector<std::string>& sizes,
       OnGetPublisherAdsCallback callback) = 0;

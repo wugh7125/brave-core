@@ -113,7 +113,7 @@ class AdsServiceImpl : public AdsService,
       const uint64_t to_timestamp,
       OnGetAdsHistoryCallback callback) override;
 
-  void GetPublisherAds(
+  bool GetPublisherAds(
       const std::string& url,
       const std::vector<std::string>& sizes,
       OnGetPublisherAdsCallback callback) override;

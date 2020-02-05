@@ -1,5 +1,5 @@
 diff --git a/chrome/android/java/src/org/chromium/chrome/browser/toolbar/top/ToolbarPhone.java b/chrome/android/java/src/org/chromium/chrome/browser/toolbar/top/ToolbarPhone.java
-index fd3724b04d07cc2dedeff2a1f629175b5b035446..74a09ee1886837e90a7bf5bbfe8ae5db90dcdf4c 100644
+index 5d0c804dce030dd299107073c8cbb695746578bb..fe21fa54a36e75c30f2ac8796114b4988012e4ae 100644
 --- a/chrome/android/java/src/org/chromium/chrome/browser/toolbar/top/ToolbarPhone.java
 +++ b/chrome/android/java/src/org/chromium/chrome/browser/toolbar/top/ToolbarPhone.java
 @@ -92,7 +92,7 @@ import java.util.List;
@@ -42,7 +42,7 @@ index fd3724b04d07cc2dedeff2a1f629175b5b035446..74a09ee1886837e90a7bf5bbfe8ae5db
      }
  
      private void updateToolbarBackground(int color) {
-@@ -2157,6 +2160,7 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
+@@ -2162,6 +2165,7 @@ public class ToolbarPhone extends ToolbarLayout implements Invalidator.Client, O
          } else {
              populateUrlClearFocusingAnimatorSet(animators);
          }

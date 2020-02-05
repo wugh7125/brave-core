@@ -1,5 +1,5 @@
 diff --git a/third_party/blink/renderer/modules/webaudio/analyser_node.cc b/third_party/blink/renderer/modules/webaudio/analyser_node.cc
-index 4df218da56b5f4db4bf40d5ca19c1ab24d9e50fd..ddd9cadb6a50dbc24ae52bb59e4b80c4a3661d05 100644
+index 187f2cadbb882012554cd25f5e2fd6e235a21c86..dd203d8004d79ae66b6a327c9cc9452930908a0e 100644
 --- a/third_party/blink/renderer/modules/webaudio/analyser_node.cc
 +++ b/third_party/blink/renderer/modules/webaudio/analyser_node.cc
 @@ -25,6 +25,7 @@
@@ -7,7 +7,7 @@ index 4df218da56b5f4db4bf40d5ca19c1ab24d9e50fd..ddd9cadb6a50dbc24ae52bb59e4b80c4
  #include "third_party/blink/renderer/modules/webaudio/analyser_node.h"
  
 +#include "brave/renderer/brave_content_settings_agent_impl_helper.h"
- #include "third_party/blink/renderer/modules/webaudio/analyser_options.h"
+ #include "third_party/blink/renderer/bindings/modules/v8/v8_analyser_options.h"
  #include "third_party/blink/renderer/modules/webaudio/audio_node_input.h"
  #include "third_party/blink/renderer/modules/webaudio/audio_node_output.h"
 @@ -274,20 +275,28 @@ double AnalyserNode::smoothingTimeConstant() const {

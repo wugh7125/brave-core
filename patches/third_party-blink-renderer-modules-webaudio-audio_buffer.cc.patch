@@ -1,5 +1,5 @@
 diff --git a/third_party/blink/renderer/modules/webaudio/audio_buffer.cc b/third_party/blink/renderer/modules/webaudio/audio_buffer.cc
-index f173f1bbf32d5ba09d16b5c3f5e7755a2023f240..5e5f1e7a0db6760781acbad973df1afa2b636ab2 100644
+index a35049157303d807bb75de683db0aff4f4a0c18d..2aa87d5b5ecba32aff243f78f58d61b642712b81 100644
 --- a/third_party/blink/renderer/modules/webaudio/audio_buffer.cc
 +++ b/third_party/blink/renderer/modules/webaudio/audio_buffer.cc
 @@ -29,6 +29,7 @@
@@ -7,7 +7,7 @@ index f173f1bbf32d5ba09d16b5c3f5e7755a2023f240..5e5f1e7a0db6760781acbad973df1afa
  
  #include <memory>
 +#include "brave/renderer/brave_content_settings_agent_impl_helper.h"
- #include "third_party/blink/renderer/modules/webaudio/audio_buffer_options.h"
+ #include "third_party/blink/renderer/bindings/modules/v8/v8_audio_buffer_options.h"
  #include "third_party/blink/renderer/modules/webaudio/base_audio_context.h"
  #include "third_party/blink/renderer/platform/audio/audio_bus.h"
 @@ -191,8 +192,13 @@ AudioBuffer::AudioBuffer(AudioBus* bus)
@@ -41,7 +41,7 @@ index f173f1bbf32d5ba09d16b5c3f5e7755a2023f240..5e5f1e7a0db6760781acbad973df1afa
 +void AudioBuffer::copyFromChannel(ScriptState* script_state,
 +                                  NotShared<DOMFloat32Array> destination,
                                    int32_t channel_number,
-                                   uint32_t buffer_offset,
+                                   size_t buffer_offset,
                                    ExceptionState& exception_state) {
 +  LocalDOMWindow* window = LocalDOMWindow::From(script_state);
 +  if (window && !AllowFingerprinting(window->GetFrame())) {

@@ -1,12 +1,11 @@
 diff --git a/chrome/browser/ui/views/profiles/profile_menu_view.cc b/chrome/browser/ui/views/profiles/profile_menu_view.cc
-index 3c714bfb47b3353e4275da5ea78a538a25f967a8..76abb72eeb6a83b4169014a47db00a2ee8d109f5 100644
+index 631efe1e3e57b6789742b6eba8bc6656bc1b55b2..49f2439a2c11d23475c33f2ffa0d9e7948bc547e 100644
 --- a/chrome/browser/ui/views/profiles/profile_menu_view.cc
 +++ b/chrome/browser/ui/views/profiles/profile_menu_view.cc
-@@ -1062,6 +1062,7 @@ void ProfileMenuView::AddOptionsView(bool display_lock,
-   if (is_guest) {
-     CreateAndAddButton(
-         CreateVectorIcon(kCloseAllIcon),
-+        BRAVE_ADDOPTIONSVIEW_ADD_TOR_EXIT_BUTTON_
-         l10n_util::GetStringUTF16(IDS_PROFILES_EXIT_GUEST),
-         base::BindRepeating(&ProfileMenuView::OnExitProfileButtonClicked,
+@@ -609,3 +609,5 @@ void ProfileMenuView::BuildProfileManagementFeatureButtons() {
                              base::Unretained(this)));
+   }
+ }
++
++        BRAVE_ADDOPTIONSVIEW_ADD_TOR_EXIT_BUTTON_
+\ No newline at end of file

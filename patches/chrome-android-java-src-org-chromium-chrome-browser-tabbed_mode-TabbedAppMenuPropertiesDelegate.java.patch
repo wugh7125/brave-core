@@ -1,5 +1,5 @@
 diff --git a/chrome/android/java/src/org/chromium/chrome/browser/tabbed_mode/TabbedAppMenuPropertiesDelegate.java b/chrome/android/java/src/org/chromium/chrome/browser/tabbed_mode/TabbedAppMenuPropertiesDelegate.java
-index 46cb7743562ebcfedc2975d86506bbae4bf4229a..63fbe4dda2b97a2892ea0790d4da88b3ef904275 100644
+index e1976190d4fc0a322a696fe799e986d6724facfc..fda12cc6d5d477c1672b4b12b96c711567b3ea87 100644
 --- a/chrome/android/java/src/org/chromium/chrome/browser/tabbed_mode/TabbedAppMenuPropertiesDelegate.java
 +++ b/chrome/android/java/src/org/chromium/chrome/browser/tabbed_mode/TabbedAppMenuPropertiesDelegate.java
 @@ -12,6 +12,7 @@ import org.chromium.chrome.R;

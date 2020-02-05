@@ -1,13 +1,13 @@
 diff --git a/chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java b/chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java
-index be8466ad87791880f1f3c4ea61db11c466eb3356..9d977486ffffda3c6545d974c1f4e8a26325a93e 100644
+index b84b61a7ef4d79c6182ad0b65a96871360a638f0..7fe99546b63ce1e5b9033a52ebbb6a8edf096854 100644
 --- a/chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java
 +++ b/chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java
-@@ -172,7 +172,7 @@ import java.util.Locale;
+@@ -169,7 +169,7 @@ import java.util.Locale;
   * This is the main activity for ChromeMobile when not running in document mode.  All the tabs
   * are accessible via a chrome specific tab switching UI.
   */
--public class ChromeTabbedActivity extends ChromeActivity implements ScreenshotMonitorDelegate {
-+public class ChromeTabbedActivity extends BraveActivity implements ScreenshotMonitorDelegate {
-     /**
-      * The results of a system back press action.
-      */
+-public class ChromeTabbedActivity extends ChromeActivity {
++public class ChromeTabbedActivity extends BraveActivity {
+     private static final String TAG = "ChromeTabbedActivity";
+ 
+     private static final String HELP_URL_PREFIX = "https://support.google.com/chrome/";

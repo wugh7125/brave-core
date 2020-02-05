@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/page_info/page_info.cc b/chrome/browser/ui/page_info/page_info.cc
-index 794502fa466ad3714317c4de90676221941841c8..0e2ae17c21bc88674ef0539c1ac6eebf5527cbfe 100644
+index bb116034c8a29bf8f60fc4b6f2e070870f84aa33..f00033bf334c9d14bbb95e48d69dac212d4ed683 100644
 --- a/chrome/browser/ui/page_info/page_info.cc
 +++ b/chrome/browser/ui/page_info/page_info.cc
-@@ -170,6 +170,7 @@ bool ShouldShowPermission(
+@@ -173,6 +173,7 @@ bool ShouldShowPermission(
      HostContentSettingsMap* content_settings,
      content::WebContents* web_contents,
      TabSpecificContentSettings* tab_specific_content_settings) {

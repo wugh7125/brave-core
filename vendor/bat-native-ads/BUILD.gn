@@ -206,6 +206,10 @@ source_set("ads") {
     "src/bat/ads/internal/time.h",
     "src/bat/ads/internal/uri_helper.cc",
     "src/bat/ads/internal/uri_helper.h",
+    "src/bat/ads/internal/purchase_intent/funnel_site_info.cc",
+    "src/bat/ads/internal/purchase_intent/funnel_site_info.h",
+    "src/bat/ads/internal/purchase_intent/funnel_sites.cc",
+    "src/bat/ads/internal/purchase_intent/funnel_sites.h",
   ]
 
   deps = [

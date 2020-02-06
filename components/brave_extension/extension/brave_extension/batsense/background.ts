@@ -4,7 +4,7 @@ const adCatalog = new AdCatalog()
 
 // Respond to requests for creatives from tab content scripts
 chrome.runtime.onMessageExternal.addListener(
-  async function(request, sender, sendResponse) {
+  async function (request, sender, sendResponse) {
     console.log('got message', request.type, request)
     switch (request.type) {
       case 'ad-request':
@@ -22,4 +22,4 @@ chrome.runtime.onMessageExternal.addListener(
         break
     }
   }
-);
+)

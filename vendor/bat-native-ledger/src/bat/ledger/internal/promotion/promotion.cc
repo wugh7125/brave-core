@@ -478,7 +478,7 @@ void Promotion::ClaimTokens(
   for (auto & token : tokens) {
     auto token_base64 = token.encode_base64();
     auto token_value = base::Value(token_base64);
-    tokens_list.GetList().push_back(std::move(token_value));
+    tokens_list.Insert(tokens_list.GetList().end(), std::move(token_value));
   }
   std::string json_tokens;
   base::JSONWriter::Write(tokens_list, &json_tokens);
@@ -498,7 +498,7 @@ void Promotion::ClaimTokens(
   for (auto & token : blinded_tokens) {
     auto token_base64 = token.encode_base64();
     auto token_value = base::Value(token_base64);
-    blinded_list.GetList().push_back(std::move(token_value));
+    blinded_list.Insert(blinded_list.GetList().end(), std::move(token_value));
   }
   std::string json_blinded;
   base::JSONWriter::Write(blinded_list, &json_blinded);
@@ -848,8 +848,8 @@ void Promotion::CheckForCorrupted(const ledger::PromotionMap& promotions) {
     if (!result) {
       BLOG(ledger_, ledger::LogLevel::LOG_INFO)
       << "Promotion corrupted " << item.second->id;
-      corrupted_claims.GetList().push_back(
-          base::Value(item.second->credentials->claim_id));
+      corrupted_claims.Insert(corrupted_claims.GetList().end(),
+                              base::Value(item.second->credentials->claim_id));
       corrupted_promotions.push_back(item.second->id);
     }
   }

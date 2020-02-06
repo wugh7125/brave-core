@@ -394,7 +394,7 @@ base::Value Notifications::GetAsList() {
     dictionary.SetKey(kNotificationUuidKey,
         base::Value(notification.uuid));
 
-    list.GetList().push_back(std::move(dictionary));
+    list.Insert(list.GetList().end(), std::move(dictionary));
   }
 
   return list;

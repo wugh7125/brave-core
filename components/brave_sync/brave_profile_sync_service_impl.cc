@@ -805,12 +805,15 @@ void BraveProfileSyncServiceImpl::LoadSyncEntityInfo(
 
 bool BraveProfileSyncServiceImpl::IsOtherBookmarksFolder(
     const jslib::SyncRecord* record) const {
+  auto bookmark = record->GetBookmark();
+  if (!bookmark.isFolder)
+    return false;
+
   std::string other_node_object_id;
   if (model_->other_node()->GetMetaInfo("object_id", &other_node_object_id) &&
       record->objectId == other_node_object_id)
     return true;
 
-  auto bookmark = record->GetBookmark();
   if (bookmark.order == tools::kOtherNodeOrder &&
       bookmark.site.title == tools::GetOtherNodeName() &&
       bookmark.site.customTitle == tools::GetOtherNodeName()) {

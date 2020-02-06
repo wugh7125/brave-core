@@ -49,6 +49,11 @@ FORWARD_DECLARE_TEST(BraveSyncServiceTest, SetThisDeviceCreatedTime);
 FORWARD_DECLARE_TEST(BraveSyncServiceTest, InitialFetchesStartWithZero);
 FORWARD_DECLARE_TEST(BraveSyncServiceTest, DeviceIdV2Migration);
 FORWARD_DECLARE_TEST(BraveSyncServiceTest, DeviceIdV2MigrationDupDeviceId);
+FORWARD_DECLARE_TEST(BraveSyncServiceTest, IsOtherBookmarksFolder);
+FORWARD_DECLARE_TEST(BraveSyncServiceTest, ProcessOtherBookmarksFolder);
+FORWARD_DECLARE_TEST(BraveSyncServiceTest, ProcessOtherBookmarksChildren);
+FORWARD_DECLARE_TEST(BraveSyncServiceTest, CheckOtherBookmarkRecord);
+FORWARD_DECLARE_TEST(BraveSyncServiceTest, CheckOtherBookmarkChildRecord);
 
 class BraveSyncServiceTest;
 
@@ -168,6 +173,16 @@ class BraveProfileSyncServiceImpl
   FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest, DeviceIdV2Migration);
   FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
                            DeviceIdV2MigrationDupDeviceId);
+  FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
+                           IsOtherBookmarksFolder);
+  FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
+                           ProcessOtherBookmarksFolder);
+  FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
+                           ProcessOtherBookmarksChildren);
+  FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
+                           CheckOtherBookmarkRecord);
+  FRIEND_TEST_ALL_PREFIXES(::BraveSyncServiceTest,
+                           CheckOtherBookmarkChildRecord);
 
   friend class ::BraveSyncServiceTest;
 

@@ -89,6 +89,7 @@ AdsImpl::AdsImpl(AdsClient* ads_client) :
     ad_conversions_(std::make_unique<AdConversions>(
         this, ads_client, client_.get())),
     user_model_(nullptr),
+    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()),
     is_initialized_(false),
     is_confirmations_ready_(false),
     ads_client_(ads_client) {
@@ -717,6 +718,12 @@ void AdsImpl::OnPageLoaded(
           << last_shown_ad_notification_info_.target_url;
   }
 
+  // TODO(MH): Refactor `MaybeClassifyPage` to generalise across multiple
+  //           targeting mechanisms including purchase intent
+  // TODO(MH): Is this the right event/order of operation in relation to
+  //           "contextual" user_model_
+  MaybeHasPurchaseIntent(url);
+
   if (!IsSupportedUrl(url)) {
     BLOG(INFO) << "Site visited " << url << ", unsupported URL";
     return;
@@ -737,6 +744,18 @@ void AdsImpl::OnPageLoaded(
 
   BLOG(INFO) << "Site visited " << url << ", previous tab url was "
       << previous_tab_url_;
+}
+
+void AdsImpl::MaybeHasPurchaseIntent(
+    const std::string& url) {
+  IntentSignalInfo intent_signal =
+      purchase_intent_classifier_->ExtractIntentSignal(url);
+  BLOG(INFO) << "DEBUG: Extracted intent signal strength "
+      << intent_signal.strength;
+  
+  for (const auto& segment : intent_signal.segments) {
+    BLOG(INFO) << "DEBUG: ..for segment " << segment;
+  }
 }
 
 void AdsImpl::CheckAdConversion(

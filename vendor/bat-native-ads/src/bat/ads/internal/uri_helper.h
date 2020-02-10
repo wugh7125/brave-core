@@ -15,6 +15,10 @@ class Uri {
   static std::string GetUri(
       const std::string& url);
 
+  static std::string GetValueForKeyInQuery(
+      const std::string& url,
+      const std::string& key);
+
   static bool MatchWildcard(
       const std::string& url,
       const std::string& pattern);

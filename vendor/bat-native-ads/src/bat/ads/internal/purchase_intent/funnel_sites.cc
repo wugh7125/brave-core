@@ -14,16 +14,14 @@ namespace ads {
 FunnelSites::FunnelSites() = default;
 FunnelSites::~FunnelSites() = default;
 
-bool FunnelSites::IsFunnelSite(const std::string& url) {
+FunnelSiteInfo FunnelSites::MatchFunnelSite(const std::string& url) {
   auto visited_url = GURL(url);
 
   if (!visited_url.has_host()) {
-    return false;
+    return FunnelSiteInfo();
   }
 
-  auto is_funnel_site = false;
-
-  for (const auto& funnel_site : _funnel_sites) {
+  for (const auto& funnel_site : _automotive_funnel_sites) {
     auto funnel_site_hostname = GURL(funnel_site.url_netloc);
 
     if (!funnel_site_hostname.is_valid()) {
@@ -31,12 +29,11 @@ bool FunnelSites::IsFunnelSite(const std::string& url) {
     }
 
     if (visited_url.DomainIs(funnel_site_hostname.host_piece())) {
-      is_funnel_site = true;
-      break;
+      return funnel_site;
     }
   }
 
-  return is_funnel_site;
+  return FunnelSiteInfo();
 }
 
 }  // namespace ads

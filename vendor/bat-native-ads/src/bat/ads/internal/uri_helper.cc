@@ -9,6 +9,7 @@
 #include "url/url_constants.h"
 #include "url/gurl.h"
 #include "third_party/re2/src/re2/re2.h"
+#include "net/base/url_util.h"
 
 namespace helper {
 
@@ -25,6 +26,19 @@ std::string Uri::GetUri(const std::string& url) {
   }
 
   return url;
+}
+
+std::string Uri::GetValueForKeyInQuery(
+    const std::string& url,
+    const std::string& key) {
+  auto gurl = GURL(url);
+  std::string query_value;
+
+  if (!net::GetValueForKeyInQuery(gurl, key, &query_value)) {
+    return "";
+  }
+
+  return query_value;
 }
 
 bool Uri::MatchWildcard(

@@ -15,26 +15,17 @@
 
 using ::testing::_;
 
-// npm run test -- brave_unit_tests --filter=AdsPurchaseIntent*
-
-namespace {
-
-const std::vector<std::tuple<std::string, bool>> kTestUrls = {
-  std::tuple<std::string, bool>("http://www.carmax.com", true),
-  std::tuple<std::string, bool>("http://www.carmax.com/foobar", true),
-  std::tuple<std::string, bool>("http://carmax.com", true),
-  std::tuple<std::string, bool>("https://brave.com", false),
-  std::tuple<std::string, bool>("https://paragonmotorclub.com/roadside/roadside_fleet.html", true),
-  std::tuple<std::string, bool>("http://jagxk.com/news.html", true),
-  std::tuple<std::string, bool>("https://www.autotrader.com/research/?rdpage=SUBNAV", true),
-  std::tuple<std::string, bool>("https://www.kbb.com/audi/a6/2019/styles/?intent=buy-new", true),
-  std::tuple<std::string, bool>("https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?sourceContext=carGurusHomePageModel&entitySelectingHelper.selectedEntity=m3&zip=12345", true),
-  std::tuple<std::string, bool>("carmax.com", false)
-};
-
-}  // namespace
+// npm run test -- brave_unit_tests --filter=AdsPurchaseIntentFunnelSites*
 
 namespace ads {
+
+// TODO(MH): Add more test cases
+const std::vector<std::tuple<std::string, FunnelSiteInfo>> kTestUrls = {
+  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com", _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com/foobar", _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://carmax.com", _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://brave.com/foobar", FunnelSiteInfo()),
+};
 
 class AdsPurchaseIntentFunnelSitesTest : public ::testing::Test {
  protected:
@@ -57,7 +48,6 @@ class AdsPurchaseIntentFunnelSitesTest : public ::testing::Test {
   void SetUp() override {
     // Code here will be called immediately after the constructor (right before
     // each test)
-    funnel_sites_ = std::make_unique<FunnelSites>();
   }
 
   void TearDown() override {
@@ -66,24 +56,20 @@ class AdsPurchaseIntentFunnelSitesTest : public ::testing::Test {
   }
 
   // Objects declared here can be used by all tests in the test case
-  std::unique_ptr<FunnelSites> funnel_sites_;
 };
 
 TEST_F(AdsPurchaseIntentFunnelSitesTest, MatchesFunnelSites) {  
   for (const auto& test_url: kTestUrls) {
     // Arrange
-    auto url = std::get<0>(test_url);
-    auto is_funnel_site = std::get<1>(test_url);
+    std::string url = std::get<0>(test_url);
+    FunnelSiteInfo funnel_site = std::get<1>(test_url);
 
     // Act
-    const bool did_match = funnel_sites_->IsFunnelSite(url);
-
-    // TODO(MH): Delete
-    std::cout << "DEBUG: " << url << " - " << is_funnel_site << " - "
-        << did_match << "\n";
+    const FunnelSiteInfo matched_site = FunnelSites::MatchFunnelSite(url);
 
     // Assert
-    EXPECT_TRUE(is_funnel_site == did_match);
+    EXPECT_EQ(funnel_site.weight, matched_site.weight);
+    EXPECT_EQ(funnel_site.url_netloc, matched_site.url_netloc);
   }
 }
 

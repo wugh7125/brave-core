@@ -6,28 +6,24 @@
 #include <string>
 #include <vector>
 
-#include "bat/ads/internal/purchase_intent/funnel_site_info.h"
+#include "bat/ads/internal/purchase_intent/intent_signal_info.h"
 
 namespace ads {
 
-FunnelSiteInfo::FunnelSiteInfo() :
+IntentSignalInfo::IntentSignalInfo() :
     segments({}),
-    url_netloc(""),
-    weight(0) {}
+    strength(0) {}
 
-FunnelSiteInfo::FunnelSiteInfo(
+IntentSignalInfo::IntentSignalInfo(
     const std::vector<std::string> segments,
-    const std::string& url_netloc,
-    const std::uint8_t& weight) :
+    const std::uint16_t& strength) :
     segments(segments),
-    url_netloc(url_netloc),
-    weight(weight) {}
+    strength(strength) {}
 
-FunnelSiteInfo::FunnelSiteInfo(const FunnelSiteInfo& info) :
+IntentSignalInfo::IntentSignalInfo(const IntentSignalInfo& info) :
     segments(info.segments),
-    url_netloc(info.url_netloc),
-    weight(info.weight) {}
+    strength(info.strength) {}
 
-FunnelSiteInfo::~FunnelSiteInfo() {}
+IntentSignalInfo::~IntentSignalInfo() {}
 
 }  // namespace ads

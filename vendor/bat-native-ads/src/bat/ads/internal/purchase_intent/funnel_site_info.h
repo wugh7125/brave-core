@@ -7,6 +7,7 @@
 #define BAT_ADS_INTERNAL_FUNNEL_SITE_INFO_H_
 
 #include <string>
+#include <vector>
 
 namespace ads {
 
@@ -14,11 +15,13 @@ struct FunnelSiteInfo {
  public:
   FunnelSiteInfo();
   FunnelSiteInfo(
+      const std::vector<std::string> segments, // TODO(MH): use reference of vec instead?
       const std::string& url_netloc,
       const std::uint8_t& weight);
   FunnelSiteInfo(const FunnelSiteInfo& info);
   ~FunnelSiteInfo();
 
+  std::vector<std::string> segments;
   std::string url_netloc;
   std::uint8_t weight;
 };

@@ -21,6 +21,6 @@ public abstract class BraveAds {
 
     @CalledByNative
     public static String getBraveAdsBackgroundChannelId() {
-        return ChannelDefinitions.ChannelId.BRAVE_ADS_BACKGROUND;
+        return BraveChannelDefinitions.ChannelId.BRAVE_ADS_BACKGROUND;
     }
 }

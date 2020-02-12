@@ -31,6 +31,11 @@ class Client {
   void AppendAdHistoryToAdsShownHistory(
       const AdHistory& ad_history);
   std::deque<AdHistory> GetAdsShownHistory() const;
+  void AppendToPurchaseIntentSignalHistoryForSegment(
+      const std::string& segment,
+      const PurchaseIntentSignalHistory& history);
+  const std::map<std::string, std::deque<PurchaseIntentSignalHistory>>
+      GetPurchaseIntentSignalHistory() const;
   AdContent::LikeAction ToggleAdThumbUp(
       const std::string& creative_instance_id,
       const std::string& creative_set_id,

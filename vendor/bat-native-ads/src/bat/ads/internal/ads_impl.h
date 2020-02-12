@@ -169,6 +169,8 @@ class AdsImpl : public Ads {
 
   void MaybeHasPurchaseIntent(
       const std::string& url);
+  void GenerateIntentSignalHistoryEntry(
+      const IntentSignalInfo& intent_signal);
 
   void MaybeClassifyPage(
       const std::string& url,

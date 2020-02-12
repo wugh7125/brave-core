@@ -15,11 +15,13 @@ struct IntentSignalInfo {
  public:
   IntentSignalInfo();
   IntentSignalInfo(
-      const std::vector<std::string> segments, // TODO(MH): reference?
-      const std::uint16_t& strength);
+    const uint64_t timestamp_in_seconds,
+    const std::vector<std::string> segments, // TODO(MH): reference?
+    const std::uint16_t& strength);
   IntentSignalInfo(const IntentSignalInfo& info);
   ~IntentSignalInfo();
 
+  uint64_t timestamp_in_seconds;
   std::vector<std::string> segments;
   std::uint16_t strength;
 };

@@ -12,7 +12,7 @@
 #include "bat/ads/ad_history.h"
 #include "bat/ads/ads_client.h"
 #include "bat/ads/confirmation_type.h"
-
+#include "bat/ads/purchase_intent_signal_history.h"
 #include "bat/ads/internal/ads_impl.h"
 #include "bat/ads/internal/classification_helper.h"
 #include "bat/ads/internal/locale_helper.h"
@@ -89,7 +89,7 @@ AdsImpl::AdsImpl(AdsClient* ads_client) :
     ad_conversions_(std::make_unique<AdConversions>(
         this, ads_client, client_.get())),
     user_model_(nullptr),
-    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()),
+    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()), // TODO(MH): use as "static" class?
     is_initialized_(false),
     is_confirmations_ready_(false),
     ads_client_(ads_client) {
@@ -746,15 +746,29 @@ void AdsImpl::OnPageLoaded(
       << previous_tab_url_;
 }
 
+// TODO(MH): Rename in ExtractPurchaseIntentSignal
 void AdsImpl::MaybeHasPurchaseIntent(
     const std::string& url) {
   IntentSignalInfo intent_signal =
       purchase_intent_classifier_->ExtractIntentSignal(url);
-  BLOG(INFO) << "DEBUG: Extracted intent signal strength "
-      << intent_signal.strength;
-  
+
+  std::string display_segments = "";
   for (const auto& segment : intent_signal.segments) {
-    BLOG(INFO) << "DEBUG: ..for segment " << segment;
+    display_segments = display_segments + "\"" + segment + "\"";
+  }
+  BLOG(INFO) << "[DEBUG 1] Extracted intent signal with strength "
+      << intent_signal.strength << " for segments " << display_segments;
+
+  GenerateIntentSignalHistoryEntry(intent_signal);
+}
+
+void AdsImpl::GenerateIntentSignalHistoryEntry(
+    const IntentSignalInfo& intent_signal) {
+  for (const auto& segment : intent_signal.segments) {
+    auto history = std::make_unique<PurchaseIntentSignalHistory>();
+    history->timestamp_in_seconds = intent_signal.timestamp_in_seconds;
+    history->weight = intent_signal.strength;
+    client_->AppendToPurchaseIntentSignalHistoryForSegment(segment, *history);
   }
 }
 

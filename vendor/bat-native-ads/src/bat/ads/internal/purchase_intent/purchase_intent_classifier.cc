@@ -3,11 +3,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include <iostream>
+
 #include "bat/ads/internal/purchase_intent/purchase_intent_classifier.h"
 #include "bat/ads/internal/purchase_intent/funnel_sites.h"
 #include "bat/ads/internal/purchase_intent/keywords.h"
-
-#include <iostream>
+#include "bat/ads/internal/time.h"
 
 namespace ads {
 
@@ -32,11 +33,12 @@ IntentSignalInfo PurchaseIntentClassifier::ExtractIntentSignal(
 
     auto kw_weight = Keywords::MatchFunnelList(search_query);
 
-    return IntentSignalInfo(kw_segments, kw_weight);
+    return IntentSignalInfo(Time::NowInSeconds(), kw_segments, kw_weight);
   } else {
     // std::cout << "[DEBUG] 3: no search\n";
     FunnelSiteInfo funnel_site = FunnelSites::MatchFunnelSite(url);
-    return IntentSignalInfo(funnel_site.segments, funnel_site.weight);
+    return IntentSignalInfo(Time::NowInSeconds(), funnel_site.segments,
+        funnel_site.weight);
   }
 
   return IntentSignalInfo();

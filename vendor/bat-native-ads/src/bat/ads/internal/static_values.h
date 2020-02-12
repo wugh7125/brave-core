@@ -29,6 +29,8 @@ const int kWinningCategoryCountForServingAds = 3;
 // confirmation types
 const uint64_t kMaximumEntriesInAdsShownHistory = 7 * (20 * 4);
 
+const uint64_t kMaximumEntriesPerSegmentInPurchaseIntentSignalHistory = 1000;
+
 const uint64_t kDebugOneHourInSeconds = 25;
 
 const char kEasterEggUrl[] = "https://iab.com";

@@ -13,6 +13,7 @@
 #include <deque>
 
 #include "bat/ads/ad_history.h"
+#include "bat/ads/purchase_intent_signal_history.h"
 #include "bat/ads/result.h"
 
 #include "bat/ads/internal/ad_preferences.h"
@@ -55,6 +56,8 @@ struct ClientState {
   bool shop_activity = false;
   std::string shop_url;
   std::string version_code;
+  std::map<std::string, std::deque<PurchaseIntentSignalHistory>>
+      purchase_intent_signal_history;
 };
 
 }  // namespace ads

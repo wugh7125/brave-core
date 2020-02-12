@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "bat/ads/internal/search_providers.h"
-#include "bat/ads/internal/purchase_intent/intent_signal_info.h"
+#include "bat/ads/internal/purchase_intent/purchase_intent_signal_info.h"
 
 namespace ads {
 
@@ -19,7 +19,7 @@ class PurchaseIntentClassifier {
   PurchaseIntentClassifier();
   ~PurchaseIntentClassifier();
 
-  IntentSignalInfo ExtractIntentSignal(const std::string& url); // TODO(MH): make static?
+  PurchaseIntentSignalInfo ExtractIntentSignal(const std::string& url);
 };
 
 }  // namespace ads

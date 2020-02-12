@@ -89,7 +89,7 @@ AdsImpl::AdsImpl(AdsClient* ads_client) :
     ad_conversions_(std::make_unique<AdConversions>(
         this, ads_client, client_.get())),
     user_model_(nullptr),
-    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()), // TODO(MH): use as "static" class?
+    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()), // TODO(Moritz Haller): Rather use struct with collection of static helper methods?
     is_initialized_(false),
     is_confirmations_ready_(false),
     ads_client_(ads_client) {
@@ -718,11 +718,7 @@ void AdsImpl::OnPageLoaded(
           << last_shown_ad_notification_info_.target_url;
   }
 
-  // TODO(MH): Refactor `MaybeClassifyPage` to generalise across multiple
-  //           targeting mechanisms including purchase intent
-  // TODO(MH): Is this the right event/order of operation in relation to
-  //           "contextual" user_model_
-  MaybeHasPurchaseIntent(url);
+  ExtractPurchaseIntentSignal(url);
 
   if (!IsSupportedUrl(url)) {
     BLOG(INFO) << "Site visited " << url << ", unsupported URL";
@@ -746,28 +742,27 @@ void AdsImpl::OnPageLoaded(
       << previous_tab_url_;
 }
 
-// TODO(MH): Rename in ExtractPurchaseIntentSignal
-void AdsImpl::MaybeHasPurchaseIntent(
+void AdsImpl::ExtractPurchaseIntentSignal(
     const std::string& url) {
-  IntentSignalInfo intent_signal =
+  PurchaseIntentSignalInfo purchase_intent_signal =
       purchase_intent_classifier_->ExtractIntentSignal(url);
 
   std::string display_segments = "";
-  for (const auto& segment : intent_signal.segments) {
-    display_segments = display_segments + "\"" + segment + "\"";
+  for (const auto& segment : purchase_intent_signal.segments) {
+    display_segments = display_segments + "\"" + segment + "\" ";
   }
-  BLOG(INFO) << "[DEBUG 1] Extracted intent signal with strength "
-      << intent_signal.strength << " for segments " << display_segments;
+  BLOG(INFO) << "Extracted intent signal with weight "
+      << purchase_intent_signal.weight << " for segments " << display_segments;
 
-  GenerateIntentSignalHistoryEntry(intent_signal);
+  GeneratePurchaseIntentSignalHistoryEntry(purchase_intent_signal);
 }
 
-void AdsImpl::GenerateIntentSignalHistoryEntry(
-    const IntentSignalInfo& intent_signal) {
-  for (const auto& segment : intent_signal.segments) {
+void AdsImpl::GeneratePurchaseIntentSignalHistoryEntry(
+    const PurchaseIntentSignalInfo& purchase_intent_signal) {
+  for (const auto& segment : purchase_intent_signal.segments) {
     auto history = std::make_unique<PurchaseIntentSignalHistory>();
-    history->timestamp_in_seconds = intent_signal.timestamp_in_seconds;
-    history->weight = intent_signal.strength;
+    history->timestamp_in_seconds = purchase_intent_signal.timestamp_in_seconds;
+    history->weight = purchase_intent_signal.weight;
     client_->AppendToPurchaseIntentSignalHistoryForSegment(segment, *history);
   }
 }

@@ -76,7 +76,7 @@ class AdsPurchaseIntentClassifierTest : public ::testing::Test {
   std::unique_ptr<PurchaseIntentClassifier> purchase_intent_classifier_;
 };
 
-TEST_F(AdsPurchaseIntentClassifierTest, ExtractsIntentSignal) {
+TEST_F(AdsPurchaseIntentClassifierTest, ExtractsPurchaseIntentSignal) {
   for (const auto& test_search_query: kTestSearchQueries) {
     // Arrange
     auto url = std::get<0>(test_search_query);
@@ -85,11 +85,12 @@ TEST_F(AdsPurchaseIntentClassifierTest, ExtractsIntentSignal) {
 
     // Act
     std::cout << "[TEST] Search URL: " << url << "\n";
-    IntentSignalInfo intent_signal = purchase_intent_classifier_->ExtractIntentSignal(url);
+    PurchaseIntentSignalInfo purchase_intent_signal =
+        purchase_intent_classifier_->ExtractIntentSignal(url);
 
     // Assert
-    EXPECT_EQ(segments, intent_signal.segments);
-    EXPECT_EQ(weight, intent_signal.strength);
+    EXPECT_EQ(segments, purchase_intent_signal.segments);
+    EXPECT_EQ(weight, purchase_intent_signal.weight);
   }
 }
 

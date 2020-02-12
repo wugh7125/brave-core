@@ -220,8 +220,8 @@ source_set("ads") {
     "src/bat/ads/internal/purchase_intent/keywords.h",
     "src/bat/ads/internal/purchase_intent/purchase_intent_classifier.cc",
     "src/bat/ads/internal/purchase_intent/purchase_intent_classifier.h",
-    "src/bat/ads/internal/purchase_intent/intent_signal_info.cc",
-    "src/bat/ads/internal/purchase_intent/intent_signal_info.h",
+    "src/bat/ads/internal/purchase_intent/purchase_intent_signal_info.cc",
+    "src/bat/ads/internal/purchase_intent/purchase_intent_signal_info.h",
   ]
 
   deps = [

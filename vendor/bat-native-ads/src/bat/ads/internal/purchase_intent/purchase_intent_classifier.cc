@@ -18,30 +18,28 @@ PurchaseIntentClassifier::PurchaseIntentClassifier() {
 PurchaseIntentClassifier::~PurchaseIntentClassifier() {
 }
 
-IntentSignalInfo PurchaseIntentClassifier::ExtractIntentSignal(
+PurchaseIntentSignalInfo PurchaseIntentClassifier::ExtractIntentSignal(
     const std::string& url) {
   auto search_query = SearchProviders::ExtractSearchQueryKeywords(url);
-  // std::cout << "[DEBUG] 1: " << search_query << "\n";
 
   if(!search_query.empty()) {
     auto kw_segments = Keywords::MatchSegmentsList(search_query);
-    // std::cout << "[DEBUG] 2: " << kw_segments.size() << "\n";
 
     if (kw_segments.empty()) {
-      return IntentSignalInfo();
+      return PurchaseIntentSignalInfo();
     }
 
     auto kw_weight = Keywords::MatchFunnelList(search_query);
 
-    return IntentSignalInfo(Time::NowInSeconds(), kw_segments, kw_weight);
+    return PurchaseIntentSignalInfo(Time::NowInSeconds(),
+        kw_segments, kw_weight);
   } else {
-    // std::cout << "[DEBUG] 3: no search\n";
     FunnelSiteInfo funnel_site = FunnelSites::MatchFunnelSite(url);
-    return IntentSignalInfo(Time::NowInSeconds(), funnel_site.segments,
-        funnel_site.weight);
+    return PurchaseIntentSignalInfo(Time::NowInSeconds(),
+        funnel_site.segments, funnel_site.weight);
   }
 
-  return IntentSignalInfo();
+  return PurchaseIntentSignalInfo();
 }
 
 }  // namespace ads

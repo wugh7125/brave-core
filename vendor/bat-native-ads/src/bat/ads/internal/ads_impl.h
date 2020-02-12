@@ -167,10 +167,10 @@ class AdsImpl : public Ads {
       const std::string& url,
       const std::string& content) override;
 
-  void MaybeHasPurchaseIntent(
+  void ExtractPurchaseIntentSignal(
       const std::string& url);
-  void GenerateIntentSignalHistoryEntry(
-      const IntentSignalInfo& intent_signal);
+  void GeneratePurchaseIntentSignalHistoryEntry(
+      const PurchaseIntentSignalInfo& purchase_intent_signal);
 
   void MaybeClassifyPage(
       const std::string& url,

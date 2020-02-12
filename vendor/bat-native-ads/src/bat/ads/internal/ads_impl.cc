@@ -89,7 +89,7 @@ AdsImpl::AdsImpl(AdsClient* ads_client) :
     ad_conversions_(std::make_unique<AdConversions>(
         this, ads_client, client_.get())),
     user_model_(nullptr),
-    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()), // TODO(Moritz Haller): Rather use struct with collection of static helper methods?
+    purchase_intent_classifier_(std::make_unique<PurchaseIntentClassifier>()),
     is_initialized_(false),
     is_confirmations_ready_(false),
     ads_client_(ads_client) {

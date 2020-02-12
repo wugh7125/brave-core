@@ -19,12 +19,15 @@ using ::testing::_;
 
 namespace ads {
 
-// TODO(MH): Add more test cases
 const std::vector<std::tuple<std::string, FunnelSiteInfo>> kTestUrls = {
-  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com", _automotive_funnel_sites.at(1)),
-  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com/foobar", _automotive_funnel_sites.at(1)),
-  std::tuple<std::string, FunnelSiteInfo>("http://carmax.com", _automotive_funnel_sites.at(1)),
-  std::tuple<std::string, FunnelSiteInfo>("http://brave.com/foobar", FunnelSiteInfo()),
+  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com",
+      _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://www.carmax.com/foobar",
+      _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://carmax.com",
+      _automotive_funnel_sites.at(1)),
+  std::tuple<std::string, FunnelSiteInfo>("http://brave.com/foobar",
+      FunnelSiteInfo()),
 };
 
 class AdsPurchaseIntentFunnelSitesTest : public ::testing::Test {
@@ -58,8 +61,8 @@ class AdsPurchaseIntentFunnelSitesTest : public ::testing::Test {
   // Objects declared here can be used by all tests in the test case
 };
 
-TEST_F(AdsPurchaseIntentFunnelSitesTest, MatchesFunnelSites) {  
-  for (const auto& test_url: kTestUrls) {
+TEST_F(AdsPurchaseIntentFunnelSitesTest, MatchesFunnelSites) {
+  for (const auto& test_url : kTestUrls) {
     // Arrange
     std::string url = std::get<0>(test_url);
     FunnelSiteInfo funnel_site = std::get<1>(test_url);

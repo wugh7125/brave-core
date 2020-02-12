@@ -11,22 +11,22 @@
 namespace ads {
 
 FunnelSiteInfo::FunnelSiteInfo() :
-    segments({}),
-    url_netloc(""),
-    weight(0) {}
+  segments({}),
+  url_netloc(""),
+  weight(0) {}
 
 FunnelSiteInfo::FunnelSiteInfo(
-    const std::vector<std::string> segments,
-    const std::string& url_netloc,
-    const std::uint8_t& weight) :
-    segments(segments),
-    url_netloc(url_netloc),
-    weight(weight) {}
+  const std::vector<std::string> segments,
+  const std::string& url_netloc,
+  const std::uint8_t& weight) :
+  segments(segments),
+  url_netloc(url_netloc),
+  weight(weight) {}
 
 FunnelSiteInfo::FunnelSiteInfo(const FunnelSiteInfo& info) :
-    segments(info.segments),
-    url_netloc(info.url_netloc),
-    weight(info.weight) {}
+  segments(info.segments),
+  url_netloc(info.url_netloc),
+  weight(info.weight) {}
 
 FunnelSiteInfo::~FunnelSiteInfo() {}
 

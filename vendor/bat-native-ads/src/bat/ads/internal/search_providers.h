@@ -41,7 +41,9 @@ const std::vector<SearchProviderInfo> _search_providers = {
       false),
   SearchProviderInfo(
       "Google",
-      "https://google.com", // TODO(Moritz Haller): Doesn't capture geography specific domains like google.de
+      // TODO(Moritz Haller): Doesn't capture geography specific domains
+      // like google.de
+      "https://google.com",
       "https://www.google.com/search?q={searchTerms}",
       true),
   SearchProviderInfo(
@@ -66,7 +68,9 @@ const std::vector<SearchProviderInfo> _search_providers = {
       false),
   SearchProviderInfo(
       "Yahoo",
-      "https://search.yahoo.com", // TODO(Moritz Haller): Doesn't capture geography specific subdomains like uk.search.yahoo
+      // TODO(Moritz Haller): Doesn't capture geography specific subdomains
+      // like uk.search.yahoo
+      "https://search.yahoo.com",
       "https://search.yahoo.com/search?p={searchTerms}&fr=opensearch",
       true),
   SearchProviderInfo(
@@ -76,7 +80,9 @@ const std::vector<SearchProviderInfo> _search_providers = {
       false),
   SearchProviderInfo(
       "StartPage",
-      "https://startpage.com", // TODO(Moritz Haller): Startpage doesn't generate url parameters when searching on the site
+      // TODO(Moritz Haller): Startpage doesn't generate url parameters when
+      // searching on the site
+      "https://startpage.com",
       "https://www.startpage.com/do/dsearch?query={searchTerms}&cat=web&pl=opensearch",  // NOLINT
       true),
   SearchProviderInfo(

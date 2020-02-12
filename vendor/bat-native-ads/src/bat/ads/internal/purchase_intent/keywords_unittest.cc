@@ -19,7 +19,6 @@ using ::testing::_;
 
 namespace ads {
 
-// TODO(MH): Add more test cases
 const std::vector<std::string> audi_a4_segments = {
   "automotive purchase intent by make-audi",
   "automotive purchase intent by category-entry luxury car"
@@ -29,12 +28,18 @@ const std::vector<std::string> audi_a6_segments = {
   "automotive purchase intent by category-mid luxury car"
 };
 const std::vector<std::string> no_segments = {};
-const std::vector<std::tuple<std::string, std::vector<std::string>, uint8_t>> kTestSearchqueries = {
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 review", audi_a6_segments, 2),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("  \tlatest audi\na6 !?# @& review  \t  ", audi_a6_segments, 2),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a4 dealer reviews", audi_a4_segments, 3),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 ", audi_a6_segments, 1),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("this is a test", no_segments, 1)
+const std::vector<std::tuple<std::string, std::vector<std::string>, uint8_t>>
+    kTestSearchqueries = {
+  std::tuple<std::string, std::vector<std::string>, uint8_t>
+      ("latest audi a6 review", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>
+      ("  \tlatest audi\na6 !?# @& review  \t  ", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>
+      ("latest audi a4 dealer reviews", audi_a4_segments, 3),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>
+      ("latest audi a6 ", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>
+      ("this is a test", no_segments, 1)
 };
 
 class AdsPurchaseIntentKeywordsTest : public ::testing::Test {
@@ -68,7 +73,7 @@ class AdsPurchaseIntentKeywordsTest : public ::testing::Test {
   // Objects declared here can be used by all tests in the test case
 };
 
-TEST_F(AdsPurchaseIntentKeywordsTest, MatchesSegmentKeywords) {  
+TEST_F(AdsPurchaseIntentKeywordsTest, MatchesSegmentKeywords) {
   for (const auto& search_query : kTestSearchqueries) {
     // Arrange
     auto query = std::get<0>(search_query);
@@ -82,7 +87,7 @@ TEST_F(AdsPurchaseIntentKeywordsTest, MatchesSegmentKeywords) {
   }
 }
 
-TEST_F(AdsPurchaseIntentKeywordsTest, MatchesFunnelKeywords) {  
+TEST_F(AdsPurchaseIntentKeywordsTest, MatchesFunnelKeywords) {
   for (const auto& search_query : kTestSearchqueries) {
     // Arrange
     auto query = std::get<0>(search_query);

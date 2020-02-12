@@ -14,6 +14,7 @@
 
 namespace ads {
 
+// TODO(Moritz Haller): Rather use struct with collection of static helper methods?
 class PurchaseIntentClassifier {
  public:
   PurchaseIntentClassifier();

@@ -15,9 +15,10 @@ struct FunnelSiteInfo {
  public:
   FunnelSiteInfo();
   FunnelSiteInfo(
-      const std::vector<std::string> segments, // TODO(MH): use reference of vec instead?
-      const std::string& url_netloc,
-      const std::uint8_t& weight);
+    // TODO(Moritz Haller): Pass by reference?
+    const std::vector<std::string> segments,
+    const std::string& url_netloc,
+    const std::uint8_t& weight);
   FunnelSiteInfo(const FunnelSiteInfo& info);
   ~FunnelSiteInfo();
 

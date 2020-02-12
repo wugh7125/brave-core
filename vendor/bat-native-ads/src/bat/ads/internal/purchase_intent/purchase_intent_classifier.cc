@@ -22,7 +22,7 @@ PurchaseIntentSignalInfo PurchaseIntentClassifier::ExtractIntentSignal(
     const std::string& url) {
   auto search_query = SearchProviders::ExtractSearchQueryKeywords(url);
 
-  if(!search_query.empty()) {
+  if (!search_query.empty()) {
     auto kw_segments = Keywords::MatchSegmentsList(search_query);
 
     if (kw_segments.empty()) {

@@ -7,8 +7,6 @@
 
 #include "url/gurl.h"
 
-#include <iostream>
-
 namespace ads {
 
 FunnelSites::FunnelSites() = default;

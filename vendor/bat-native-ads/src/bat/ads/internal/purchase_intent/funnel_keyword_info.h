@@ -14,8 +14,8 @@ struct FunnelKeywordInfo {
  public:
   FunnelKeywordInfo();
   FunnelKeywordInfo(
-      const std::string& keywords,
-      const std::uint8_t& weight);
+    const std::string& keywords,
+    const std::uint8_t& weight);
   FunnelKeywordInfo(const FunnelKeywordInfo& info);
   ~FunnelKeywordInfo();
 

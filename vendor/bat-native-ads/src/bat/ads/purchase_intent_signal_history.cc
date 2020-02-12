@@ -64,7 +64,8 @@ Result PurchaseIntentSignalHistory::FromJson(
   return SUCCESS;
 }
 
-void SaveToJson(JsonWriter* writer, const PurchaseIntentSignalHistory& history) {
+void SaveToJson(JsonWriter* writer,
+    const PurchaseIntentSignalHistory& history) {
   writer->StartObject();
 
   writer->String("timestamp_in_seconds");

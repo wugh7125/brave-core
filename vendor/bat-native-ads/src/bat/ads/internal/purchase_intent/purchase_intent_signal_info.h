@@ -16,7 +16,8 @@ struct PurchaseIntentSignalInfo {
   PurchaseIntentSignalInfo();
   PurchaseIntentSignalInfo(
     const uint64_t timestamp_in_seconds,
-    const std::vector<std::string> segments, // TODO(Moritz Haller): Pass as reference?
+    // TODO(Moritz Haller): Pass segments by reference?
+    const std::vector<std::string> segments,
     const std::uint16_t& weight);
   PurchaseIntentSignalInfo(const PurchaseIntentSignalInfo& info);
   ~PurchaseIntentSignalInfo();

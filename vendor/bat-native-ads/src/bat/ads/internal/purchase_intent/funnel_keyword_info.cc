@@ -8,18 +8,18 @@
 namespace ads {
 
 FunnelKeywordInfo::FunnelKeywordInfo() :
-    keywords(""),
-    weight(0) {}
+  keywords(""),
+  weight(0) {}
 
 FunnelKeywordInfo::FunnelKeywordInfo(
-    const std::string& keywords,
-    const std::uint8_t& weight) :
-    keywords(keywords),
-    weight(weight) {}
+  const std::string& keywords,
+  const std::uint8_t& weight) :
+  keywords(keywords),
+  weight(weight) {}
 
 FunnelKeywordInfo::FunnelKeywordInfo(const FunnelKeywordInfo& info) :
-    keywords(info.keywords),
-    weight(info.weight) {}
+  keywords(info.keywords),
+  weight(info.weight) {}
 
 FunnelKeywordInfo::~FunnelKeywordInfo() {}
 

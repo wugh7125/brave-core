@@ -8,7 +8,6 @@
 #include "third_party/re2/src/re2/re2.h"
 #include "url/gurl.h"
 
-#include <iostream>
 
 namespace ads {
 
@@ -75,9 +74,10 @@ std::string SearchProviders::ExtractSearchQueryKeywords(
 
     if (index != std::string::npos && href_index != std::string::npos) {
       std::string key;
-      if (!RE2::PartialMatch(search_provider.search_template, "\\?(.*?)\\={", &key)) {
+      if (!RE2::PartialMatch(
+          search_provider.search_template, "\\?(.*?)\\={", &key)) {
         return "";
-      };
+      }
 
       search_query_keywords = helper::Uri::GetValueForKeyInQuery(url, key);
       break;

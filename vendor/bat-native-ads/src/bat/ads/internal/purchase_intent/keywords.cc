@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include <iostream>
+#include <algorithm>
 #include <sstream>
 
 #include "url/gurl.h"
@@ -42,7 +42,7 @@ u_int8_t Keywords::MatchFunnelList(
     }
   }
 
-  return 1; // TODO(Moritz Haller): Is that a sensible default weighting?
+  return 1;  // TODO(Moritz Haller): Is that a sensible default weighting?
 }
 
 // is set_a subset of set_b?
@@ -51,7 +51,7 @@ bool Keywords::IsSubset(
     std::vector<std::string> kwset_b) {
   std::sort(kwset_a.begin(), kwset_a.end());
   std::sort(kwset_b.begin(), kwset_b.end());
-  
+
   return std::includes(kwset_a.begin(), kwset_a.end(),
       kwset_b.begin(), kwset_b.end());
 }
@@ -59,7 +59,7 @@ bool Keywords::IsSubset(
 // TODO(Moritz Haller): Implement as std::set?
 std::vector<std::string> Keywords::TransformIntoSetOfWords(
     const std::string& text) {
-  std::string data = text; // TODO(Moritz Haller): is that copying?
+  std::string data = text;  // TODO(Moritz Haller): is that copying?
   // Remove every character that is not a word/whitespace/underscore character
   RE2::GlobalReplace(&data, "[^\\w\\s]|_", "");
   // Strip subsequent white space characters
@@ -68,11 +68,11 @@ std::vector<std::string> Keywords::TransformIntoSetOfWords(
   std::for_each(data.begin(), data.end(), [](char & c) {
     c = ::tolower(c);
   });
-  
+
   std::stringstream sstream(data);
   std::vector<std::string> set_of_words;
   std::string word;
-  auto word_count_limit = 1000; // TODO(Moritz Haller): move to config
+  auto word_count_limit = 1000;  // TODO(Moritz Haller): move to config
   auto word_count = 0;
 
   while (sstream >> word && word_count < word_count_limit) {

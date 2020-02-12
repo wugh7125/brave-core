@@ -742,19 +742,17 @@ void AdsImpl::OnPageLoaded(
       << previous_tab_url_;
 }
 
-void AdsImpl::ExtractPurchaseIntentSignal(
-    const std::string& url) {
+void AdsImpl::ExtractPurchaseIntentSignal(const std::string& url) {
   PurchaseIntentSignalInfo purchase_intent_signal =
       purchase_intent_classifier_->ExtractIntentSignal(url);
 
-  std::string display_segments = "";
-  for (const auto& segment : purchase_intent_signal.segments) {
-    display_segments = display_segments + "\"" + segment + "\" ";
+  if (purchase_intent_signal.segments.empty() &&
+      purchase_intent_signal.timestamp_in_seconds == 0) {
+    return;
   }
-  BLOG(INFO) << "Extracted intent signal with weight "
-      << purchase_intent_signal.weight << " for segments " << display_segments;
 
   GeneratePurchaseIntentSignalHistoryEntry(purchase_intent_signal);
+  BLOG(INFO) << "Intent signal extracted for " << url;
 }
 
 void AdsImpl::GeneratePurchaseIntentSignalHistoryEntry(

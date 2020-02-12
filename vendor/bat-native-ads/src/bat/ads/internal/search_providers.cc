@@ -70,9 +70,6 @@ std::string SearchProviders::ExtractSearchQueryKeywords(
     }
 
     size_t index = search_provider.search_template.find('{');
-    // TODO(MH): doesn't catch google/yahoo/etc searches
-    //           extract independent of order of paramts
-    //           also match different subdomains, e.g. UK.search.yahoo...
     std::string substring = search_provider.search_template.substr(0, index);
     size_t href_index = url.find(substring);
 

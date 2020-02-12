@@ -30,11 +30,11 @@ const std::vector<std::string> audi_a6_segments = {
 };
 const std::vector<std::string> no_segments = {};
 const std::vector<std::tuple<std::string, std::vector<std::string>, uint8_t>> kTestSearchqueries = {
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 review", audi_a6_segments, 1),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("  \tlatest audi\na6 !?# @& review  \t  ", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 review", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("  \tlatest audi\na6 !?# @& review  \t  ", audi_a6_segments, 2),
   std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a4 dealer reviews", audi_a4_segments, 3),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 ", audi_a6_segments, 0),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("this is a test", no_segments, 0)
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("latest audi a6 ", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("this is a test", no_segments, 1)
 };
 
 class AdsPurchaseIntentKeywordsTest : public ::testing::Test {

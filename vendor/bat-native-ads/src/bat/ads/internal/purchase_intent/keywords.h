@@ -454,8 +454,8 @@ static const std::vector<SegmentKeywordInfo> _automotive_segment_keywords = {
 };
 
 static const std::vector<FunnelKeywordInfo> _automotive_funnel_keywords = {
-  FunnelKeywordInfo("review", 1),
-  FunnelKeywordInfo("youtube", 1),
+  FunnelKeywordInfo("review", 2),
+  FunnelKeywordInfo("youtube", 2),
   FunnelKeywordInfo("comparison", 2),
   FunnelKeywordInfo("pictures of", 2),
   FunnelKeywordInfo("trunk space", 2),

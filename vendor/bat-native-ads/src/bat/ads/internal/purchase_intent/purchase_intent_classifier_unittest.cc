@@ -27,17 +27,18 @@ const std::vector<std::string> audi_a6_segments = {
 };
 const std::vector<std::string> no_segments = {};
 const std::vector<std::tuple<std::string, std::vector<std::string>, uint8_t>> kTestSearchQueries = {
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://yandex.com/search/?text=audi%20a6%20review%202020&lr=109565", audi_a6_segments, 1),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.com/search?q=audi+a6+review+2020&gs_l=psy-ab.3..0j0i22i30l3.26031.26031..26262...0.0..0.82.82.1......0....2j1..gws-wiz.MZlXqcvydls&ved=0ahUKEwjAjpziu8fnAhVLzYUKHSriDZMQ4dUDCAg&uact=5", audi_a6_segments, 1),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.com/search?q=audi+a6+review+2020&oq=audi&aqs=chrome.1.69i59l2j69i57j69i60l3.2273j0j1&sourceid=chrome&ie=UTF-8", audi_a6_segments, 1),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.bing.com/search?q=audi+a6+review+2020&qs=HS&pq=audi+a&sc=8-6&cvid=68F9883A6926440F8F6CCCBCDB87A7AA&FORM=QBLH&sp=1", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://yandex.com/search/?text=audi%20a6%20review%202020&lr=109565", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.com/search?q=audi+a6+review+2020&gs_l=psy-ab.3..0j0i22i30l3.26031.26031..26262...0.0..0.82.82.1......0....2j1..gws-wiz.MZlXqcvydls&ved=0ahUKEwjAjpziu8fnAhVLzYUKHSriDZMQ4dUDCAg&uact=5", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.com/search?q=audi+a6+review+2020&oq=audi&aqs=chrome.1.69i59l2j69i57j69i60l3.2273j0j1&sourceid=chrome&ie=UTF-8", audi_a6_segments, 2),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.bing.com/search?q=audi+a6+review+2020&qs=HS&pq=audi+a&sc=8-6&cvid=68F9883A6926440F8F6CCCBCDB87A7AA&FORM=QBLH&sp=1", audi_a6_segments, 2),
   std::tuple<std::string, std::vector<std::string>, uint8_t>("https://duckduckgo.com/?q=audi+a6+dealer+reviews&t=h_&ia=web", audi_a6_segments, 3),
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://search.yahoo.com/search?p=audi+a6+review+2020&fr=sfp&iscqry=", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://duckduckgo.com/?q=audi+a6&t=h_&ia=web", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://search.yahoo.com/search?p=audi+a6+review+2020&fr=sfp&iscqry=", audi_a6_segments, 2),
   // std::tuple<std::string, std::vector<std::string>, uint8_t>("https://uk.search.yahoo.com/search?p=audi+a6+dealership+reviews&fr=yfp-t&fp=1&toggle=1&cop=mss&ei=UTF-8", audi_a6_segments, 1), // TODO: see `search_providers.h` for comments
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://fireball.com/search?q=audi+a6+review", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://fireball.com/search?q=audi+a6+review", audi_a6_segments, 2),
   // std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.de/search?source=hp&ei=GdRDXoy0EsGXkwX_37mABw&q=audi+a6+review&oq=audi+a6+review&gs_l=psy-ab.3..0l10.1808.4567..4710...0.0..0.74.661.14......0....1..gws-wiz.......0i131.IaqaaGYkPnc&ved=0ahUKEwjMpPzY58vnAhXBy6QKHf9vDnAQ4dUDCAg&uact=5", audi_a6_segments, 1), // TODO: see `search_providers.h` for comments
   // std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.startpage.com/do/search", audi_a6_segments, 1), // TODO: see `search_providers.h` for comments
-  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.ecosia.org/search?q=audi+a6+review", audi_a6_segments, 1),
+  std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.ecosia.org/search?q=audi+a6+review", audi_a6_segments, 2),
   std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.kbb.com/bmw/6-series/2017/styles/?intent=trade-in-sell&mileage=100000", _segments, 3),
   std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.cars.com/for-sale/searchresults.action/?mkId=20050&rd=10&searchSource=QUICK_FORM&zc=10001", _segments, 3),
   std::tuple<std::string, std::vector<std::string>, uint8_t>("https://www.google.com/search?source=hp&ei=lY5BXpenN-qUlwSd7bvICQ&q=foo+bar&oq=foo+bar&gs_l=psy-ab.3..0l10.1452.2016..2109...0.0..0.57.381.7......0....1..gws-wiz.......0i131j0i10.CeBo7A4BiSM&ved=0ahUKEwjXxbuPvcfnAhVqyoUKHZ32DpkQ4dUDCAg&uact=5", no_segments, 0),
@@ -84,7 +85,7 @@ TEST_F(AdsPurchaseIntentClassifierTest, ExtractsPurchaseIntentSignal) {
     auto weight = std::get<2>(test_search_query);
 
     // Act
-    std::cout << "[TEST] Search URL: " << url << "\n";
+    // std::cout << "[TEST] Search URL: " << url << "\n";
     PurchaseIntentSignalInfo purchase_intent_signal =
         purchase_intent_classifier_->ExtractIntentSignal(url);
 

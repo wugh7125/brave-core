@@ -42,7 +42,7 @@ u_int8_t Keywords::MatchFunnelList(
     }
   }
 
-  return 0;
+  return 1; // TODO(Moritz Haller): Is that a sensible default weighting?
 }
 
 // is set_a subset of set_b?
@@ -56,12 +56,14 @@ bool Keywords::IsSubset(
       kwset_b.begin(), kwset_b.end());
 }
 
-// TODO(MH): Implement as std::set?
+// TODO(Moritz Haller): Implement as std::set?
 std::vector<std::string> Keywords::TransformIntoSetOfWords(
     const std::string& text) {
-  std::string data = text; // TODO(MH): is that copying?
-  RE2::GlobalReplace(&data, "[^\\w\\s]|_", ""); // Remove every character that is not a word/whitespace/underscore character
-  RE2::GlobalReplace(&data, "\\s+", " "); // Strip subsequent white space characters
+  std::string data = text; // TODO(Moritz Haller): is that copying?
+  // Remove every character that is not a word/whitespace/underscore character
+  RE2::GlobalReplace(&data, "[^\\w\\s]|_", "");
+  // Strip subsequent white space characters
+  RE2::GlobalReplace(&data, "\\s+", " ");
 
   std::for_each(data.begin(), data.end(), [](char & c) {
     c = ::tolower(c);
@@ -70,7 +72,7 @@ std::vector<std::string> Keywords::TransformIntoSetOfWords(
   std::stringstream sstream(data);
   std::vector<std::string> set_of_words;
   std::string word;
-  auto word_count_limit = 1000; // TODO(MH): move to config
+  auto word_count_limit = 1000; // TODO(Moritz Haller): move to config
   auto word_count = 0;
 
   while (sstream >> word && word_count < word_count_limit) {

@@ -102,7 +102,7 @@ Result CatalogState::FromJson(
               "with creativeSetId: " + creative_set_info.creative_set_id;
         }
 
-        return FAILED;
+        continue;
       }
 
       for (const auto& segment : segments) {

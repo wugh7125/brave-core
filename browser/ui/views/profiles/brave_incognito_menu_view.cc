@@ -31,13 +31,13 @@ int BraveIncognitoMenuView::GetProfileMenuCloseButtonTextId() {
 }
 
 void BraveIncognitoMenuView::AddTorButton() {
-  if (brave::ShouldShowTorProfileButton(browser()->profile())) {
-    tor_profile_button_ = CreateAndAddButton(
-        brave::CreateTorProfileButtonIcon(),
-        brave::CreateTorProfileButtonText(),
-        base::BindRepeating(&BraveIncognitoMenuView::OnTorProfileButtonClicked,
-                            base::Unretained(this)));
-  }
+  //if (brave::ShouldShowTorProfileButton(browser()->profile())) {
+  //  tor_profile_button_ = CreateAndAddButton(
+  //      brave::CreateTorProfileButtonIcon(),
+  //      brave::CreateTorProfileButtonText(),
+  //      base::BindRepeating(&BraveIncognitoMenuView::OnTorProfileButtonClicked,
+  //                          base::Unretained(this)));
+  //}
 }
 
 void BraveIncognitoMenuView::OnTorProfileButtonClicked() {

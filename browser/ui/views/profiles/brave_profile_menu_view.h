@@ -16,10 +16,10 @@ class BraveProfileMenuView : public ProfileMenuView {
       using ProfileMenuView::ProfileMenuView;
   ~BraveProfileMenuView() override = default;
 
-  void AddAutofillHomeView() override;
+  void AddAutofillHomeView()/* override*/;
   void AddDiceSyncErrorView(const AvatarMenu::Item& avatar_item,
                             sync_ui_util::AvatarSyncErrorType error,
-                            int button_string_id) override;
+                            int button_string_id)/* override*/;
 
   void OnExitProfileButtonClicked() override;
 

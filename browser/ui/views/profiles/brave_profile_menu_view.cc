@@ -32,11 +32,11 @@ void BraveProfileMenuView::AddDiceSyncErrorView(
     profile_name = profiles::GetAvatarNameForProfile(profile->GetPath());
   }
 
-  AddMenuGroup();
-  current_profile_card_ = CreateAndAddTitleCard(
-      std::move(current_profile_photo), profile_name, base::string16(),
-      base::BindRepeating(&BraveProfileMenuView::OnCurrentProfileCardClicked,
-                          base::Unretained(this)));
+  //AddMenuGroup();
+  //current_profile_card_ = CreateAndAddTitleCard(
+  //    std::move(current_profile_photo), profile_name, base::string16(),
+  //    base::BindRepeating(&BraveProfileMenuView::OnCurrentProfileCardClicked,
+  //                        base::Unretained(this)));
 
   current_profile_card_->SetAccessibleName(l10n_util::GetStringFUTF16(
       IDS_PROFILES_EDIT_PROFILE_ACCESSIBLE_NAME, profile_name));

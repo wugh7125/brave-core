@@ -181,6 +181,7 @@ class AdsImpl : public Ads {
       const std::string& content);
 
   std::vector<std::string> GetWinningCategories();
+  std::vector<std::string> GetWinningPurchaseIntentCategories();
   std::string GetWinningCategory(
       const std::vector<double>& page_score);
 

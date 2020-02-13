@@ -695,6 +695,12 @@ void AdsImpl::OnPageLoaded(
     return;
   }
 
+  // TODO(Moritz Haller): Hook purchase-intent extration here?
+  //
+  // Even if the domain matches the last shown ad notification it might still
+  // count towards a segment's intent score.
+  ExtractPurchaseIntentSignal(url);
+  
   if (DomainsMatch(url, last_shown_ad_notification_info_.target_url)) {
     BLOG(INFO) << "Site visited " << url
         << ", domain matches the last shown ad notification for "
@@ -717,8 +723,6 @@ void AdsImpl::OnPageLoaded(
       << ", domain does not match the last shown ad notification for "
           << last_shown_ad_notification_info_.target_url;
   }
-
-  ExtractPurchaseIntentSignal(url);
 
   if (!IsSupportedUrl(url)) {
     BLOG(INFO) << "Site visited " << url << ", unsupported URL";
@@ -953,6 +957,21 @@ std::vector<std::string> AdsImpl::GetWinningCategories() {
   return winning_categories;
 }
 
+std::vector<std::string> AdsImpl::GetWinningPurchaseIntentCategories() {
+  auto purchase_intent_signal_history =
+      client_->GetPurchaseIntentSignalHistory();
+  if (purchase_intent_signal_history.size() == 0) {
+    return {};
+  }
+
+  // TODO(Moritz Haller): Do something interesting with purchase intent
+  // classifier/threshold model
+  std::vector<std::string> winning_categories;
+  winning_categories = {};
+
+  return winning_categories;
+}
+
 std::string AdsImpl::GetWinningCategory(
     const std::vector<double>& page_score) {
   return user_model_->GetWinningCategory(page_score);
@@ -1138,7 +1157,24 @@ void AdsImpl::CheckReadyAdServe(
     }
   }
 
-  auto categories = GetWinningCategories();
+  // TODO(Moritz Haller): Hook purchase-intent ads here?
+  //
+  // Upstream `CheckReadyAdServe()` covers business logic pertaining timing,
+  // frequency caps and permission rules downstream `ServeAdFromCategories()`
+  // covers eligibility logic.
+  // Ultimately `ServeAd()` will randomly pick from the combined set of
+  // contextual and purchaes intent ads.
+  //
+  // Contextual ads are capped at top 3, make sure there are no size
+  // restrictions downstream.
+  std::vector<std::string> categories;
+  auto contextual_categories = GetWinningCategories();
+  categories.insert(categories.end(),
+      contextual_categories.begin(), contextual_categories.end());
+  auto purchase_intent_categories = GetWinningPurchaseIntentCategories();
+  categories.insert(categories.end(),
+      purchase_intent_categories.begin(), purchase_intent_categories.end());
+
   ServeAdFromCategories(categories);
 }
 

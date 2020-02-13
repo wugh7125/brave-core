@@ -34,6 +34,22 @@ using brave_ads::AdsServiceFactory;
 using brave_rewards::RewardsService;
 using brave_rewards::RewardsServiceFactory;
 
+namespace {
+
+std::unique_ptr<brave_ads::PublisherAdInfo> ToPublisherAdInfo(
+    extensions::api::brave_rewards::PublisherAdInfo* adInfoData) {
+  auto adInfo = std::make_unique<brave_ads::PublisherAdInfo>();
+  adInfo->creative_instance_id = adInfoData->creative_instance_id;
+  adInfo->creative_set_id = adInfoData->creative_set_id;
+  adInfo->category = adInfoData->category;
+  adInfo->size = adInfoData->size;
+  adInfo->creative_url = adInfoData->creative_url;
+  adInfo->target_url = adInfoData->target_url;
+  return adInfo;
+}
+
+}  // namespace
+
 namespace extensions {
 namespace api {
 
@@ -1183,11 +1199,14 @@ BraveRewardsTriggerPublisherAdViewedFunction::Run() {
 
   std::unique_ptr<brave_rewards::TriggerPublisherAdViewed::Params> params(
       brave_rewards::TriggerPublisherAdViewed::Params::Create(*args_));
-
-  std::string json;
-  base::JSONWriter::Write(*(params->publisher_ad_info.ToValue()), &json);
-  ads_service_->OnPublisherAdEvent(json, 2);
-
+#if defined(OFFICIAL_BUILD)
+  auto ad = ToPublisherAdInfo(&(params->publisher_ad_info));
+  ads_service_->OnPublisherAdEvent(
+      *ad, brave_ads::PublisherAdEventType::kViewed);
+#else
+  LOG(ERROR) << "Did not trigger OnPublisherAdEvent for Viewed event type since"
+  "this is not an official build.";
+#endif
   return RespondNow(NoArguments());
 }
 
@@ -1206,9 +1225,10 @@ BraveRewardsTriggerPublisherAdInteractedFunction::Run() {
 
   std::unique_ptr<brave_rewards::TriggerPublisherAdInteracted::Params> params(
       brave_rewards::TriggerPublisherAdInteracted::Params::Create(*args_));
-  std::string json;
-  base::JSONWriter::Write(*(params->publisher_ad_info.ToValue()), &json);
-  ads_service_->OnPublisherAdEvent(json, 1);
+
+  auto ad = ToPublisherAdInfo(&(params->publisher_ad_info));
+  ads_service_->OnPublisherAdEvent(
+      *ad, brave_ads::PublisherAdEventType::kClicked);
 
   return RespondNow(NoArguments());
 }

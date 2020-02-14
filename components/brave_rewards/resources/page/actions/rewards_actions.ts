@@ -323,3 +323,13 @@ export const onMonthlyReport = (properties: { result: number, month: number, yea
 })
 
 export const onReconcileStampReset = () => action(types.ON_RECONCILE_STAMP_RESET)
+
+export const dismissPromoPrompt = (promo: string) => action(types.DISMISS_PROMO_PROMPT, {
+  promo
+})
+
+export const getCountryCode = () => action(types.GET_COUNTRY_CODE)
+
+export const onCountryCode = (countryCode: string) => action(types.ON_COUNTRY_CODE, {
+  countryCode
+})

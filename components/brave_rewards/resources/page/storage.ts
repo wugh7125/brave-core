@@ -37,7 +37,8 @@ export const defaultState: Rewards.State = {
     walletImported: false,
     walletRecoverySuccess: null,
     walletServerProblem: false,
-    onBoardingDisplayed: false
+    onBoardingDisplayed: false,
+    promosDismissed: {}
   },
   autoContributeList: [],
   recurringList: [],
@@ -73,7 +74,8 @@ export const defaultState: Rewards.State = {
   monthlyReport: {
     month: -1,
     year: -1
-  }
+  },
+  currentCountryCode: ''
 }
 
 const cleanData = (state: Rewards.State) => {

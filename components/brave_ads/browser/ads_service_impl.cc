@@ -1914,6 +1914,13 @@ const std::string AdsServiceImpl::GetLocale() const {
   return LocaleHelper::GetInstance()->GetLocale();
 }
 
+const std::string AdsServiceImpl::GetCountryCode() const {
+  const std::string locale = GetLocale();
+  const std::string country_code =
+      LocaleHelper::GetInstance()->GetCountryCode(locale);
+  return country_code;
+}
+
 bool AdsServiceImpl::IsNetworkConnectionAvailable() const {
   return !net::NetworkChangeNotifier::IsOffline();
 }

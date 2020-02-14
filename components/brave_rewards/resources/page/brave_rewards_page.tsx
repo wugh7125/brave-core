@@ -246,6 +246,10 @@ window.cr.define('brave_rewards', function () {
     getActions().onReconcileStampReset()
   }
 
+  function countryCode (countryCode: string) {
+    getActions().onCountryCode(countryCode)
+  }
+
   return {
     initialize,
     walletCreated,
@@ -291,7 +295,8 @@ window.cr.define('brave_rewards', function () {
     onlyAnonWallet,
     unblindedTokensReady,
     monthlyReport,
-    reconcileStampReset
+    reconcileStampReset,
+    countryCode
   }
 })
 

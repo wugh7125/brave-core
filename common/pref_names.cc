@@ -78,6 +78,11 @@ const char kRemoteDebuggingEnabled[] = "brave.remote_debugging_enabled";
 const char kAutocompleteEnabled[] = "brave.autocomplete_enabled";
 const char kBraveDarkMode[] = "brave.dark_mode";
 const char kOtherBookmarksMigrated[] = "brave.other_bookmarks_migrated";
+const char kImportDialogCookies[] = "import_dialog_cookies";
+const char kImportDialogStats[] = "import_dialog_stats";
+const char kImportDialogLedger[] = "import_dialog_ledger";
+const char kImportDialogWindows[] = "import_dialog_windows";
+const char kImportDialogExtensions[] = "import_dialog_extensions";
 
 #if defined(OS_ANDROID)
 const char kDesktopModeEnabled[] = "brave.desktop_mode_enabled";

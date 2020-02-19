@@ -13,6 +13,7 @@
 #include "brave/components/brave_component_updater/browser/brave_component.h"
 #include "brave/components/brave_referrals/buildflags/buildflags.h"
 #include "brave/components/greaselion/browser/buildflags/buildflags.h"
+#include "brave/components/speedreader/buildflags.h"
 #include "chrome/browser/browser_process_impl.h"
 #include "extensions/buildflags/buildflags.h"
 #include "third_party/widevine/cdm/buildflags.h"
@@ -58,6 +59,10 @@ namespace extensions {
 class BraveTorClientUpdater;
 }
 
+namespace speedreader {
+class SpeedreaderWhitelist;
+}
+
 using brave_component_updater::BraveComponent;
 using ntp_sponsored_images::NTPSponsoredImagesService;
 
@@ -97,6 +102,9 @@ class BraveBrowserProcessImpl : public BrowserProcessImpl {
 #endif
   brave::BraveStatsUpdater* brave_stats_updater();
   NTPSponsoredImagesService* ntp_sponsored_images_service();
+#if BUILDFLAG(ENABLE_SPEEDREADER)
+  speedreader::SpeedreaderWhitelist* speedreader_whitelist();
+#endif
 
  private:
   // BrowserProcessImpl overrides:
@@ -152,6 +160,10 @@ class BraveBrowserProcessImpl : public BrowserProcessImpl {
 #endif
   scoped_refptr<brave::BraveP3AService> brave_p3a_service_;
   std::unique_ptr<NTPSponsoredImagesService> ntp_sponsored_images_service_;
+
+#if BUILDFLAG(ENABLE_SPEEDREADER)
+  std::unique_ptr<speedreader::SpeedreaderWhitelist> speedreader_whitelist_;
+#endif
 
   SEQUENCE_CHECKER(sequence_checker_);
 

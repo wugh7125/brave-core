@@ -29,7 +29,9 @@ const int kWinningCategoryCountForServingAds = 3;
 // confirmation types
 const uint64_t kMaximumEntriesInAdsShownHistory = 7 * (20 * 4);
 
-const uint64_t kMaximumEntriesPerSegmentInPurchaseIntentSignalHistory = 1000;
+// TODO(Moritz Haller): Whats the right cap here? Research suggest that
+// consumers have 100s of digital touch points in their car buying journey.
+const uint64_t kMaximumEntriesPerSegmentInPurchaseIntentSignalHistory = 100;
 
 const uint64_t kDebugOneHourInSeconds = 25;
 

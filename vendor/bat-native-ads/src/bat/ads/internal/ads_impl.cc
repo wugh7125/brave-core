@@ -747,6 +747,14 @@ void AdsImpl::OnPageLoaded(
 }
 
 void AdsImpl::ExtractPurchaseIntentSignal(const std::string& url) {
+  if (!ShouldClassifyPagesIfTargeted()) {
+    return;
+  }
+
+  // TODO(Moritz Haller): Return if site is not a search and domain matches
+  // the previously loaded domain (otherwise navigating across a funnel site
+  // accumulates signal with every click).
+  // see code generating log "Site visited x, previous tab url was x"
   PurchaseIntentSignalInfo purchase_intent_signal =
       purchase_intent_classifier_->ExtractIntentSignal(url);
 
@@ -957,21 +965,6 @@ std::vector<std::string> AdsImpl::GetWinningCategories() {
   return winning_categories;
 }
 
-std::vector<std::string> AdsImpl::GetWinningPurchaseIntentCategories() {
-  auto purchase_intent_signal_history =
-      client_->GetPurchaseIntentSignalHistory();
-  if (purchase_intent_signal_history.size() == 0) {
-    return {};
-  }
-
-  // TODO(Moritz Haller): Do something interesting with purchase intent
-  // classifier/threshold model
-  std::vector<std::string> winning_categories;
-  winning_categories = {};
-
-  return winning_categories;
-}
-
 std::string AdsImpl::GetWinningCategory(
     const std::vector<double>& page_score) {
   return user_model_->GetWinningCategory(page_score);
@@ -987,6 +980,20 @@ void AdsImpl::CachePageScore(
   } else {
     cached_page_score->second = page_score;
   }
+}
+
+std::vector<std::string> AdsImpl::GetWinningPurchaseIntentCategories() {
+  auto purchase_intent_signal_history =
+      client_->GetPurchaseIntentSignalHistory();
+  if (purchase_intent_signal_history.size() == 0) {
+    return {};
+  }
+
+  std::vector<std::string> winning_categories;
+  winning_categories = purchase_intent_classifier_->GetWinningCategories(
+      purchase_intent_signal_history, 3);
+
+  return winning_categories;
 }
 
 void AdsImpl::TestShoppingData(
@@ -1218,6 +1225,9 @@ void AdsImpl::OnServeAdFromCategories(
     BLOG(INFO) << "  " << category;
   }
 
+  // TODO(Moritz Haller): Not serve from parent categories when targeting on
+  // intent? would pick any from e.g. "automotive purchase intent by make"
+  // achieveing the opposite of what an advertiser intends to do?
   if (ServeAdFromParentCategories(categories)) {
     return;
   }

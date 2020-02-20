@@ -4749,4 +4749,9 @@ void RewardsServiceImpl::ReconcileStampReset() {
   }
 }
 
+void RewardsServiceImpl::SetTestResponseCallback(
+    GetTestResponseCallback callback) {
+  test_response_callback_ = callback;
+}
+
 }  // namespace brave_rewards

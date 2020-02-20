@@ -1,0 +1,12 @@
+diff --git a/third_party/blink/renderer/core/frame/navigator_user_agent.idl b/third_party/blink/renderer/core/frame/navigator_user_agent.idl
+index a7bbe071b5d173243f7d19ba04190937c566c617..4fa759c44b02d36e7f147d8fb6b040de92378904 100644
+--- a/third_party/blink/renderer/core/frame/navigator_user_agent.idl
++++ b/third_party/blink/renderer/core/frame/navigator_user_agent.idl
+@@ -5,7 +5,6 @@
+ // https://github.com/WICG/ua-client-hints
+ 
+ [
+-    RuntimeEnabled=UserAgentClientHint,
+     Exposed=Window
+ ] interface mixin NavigatorUserAgent {
+   [SecureContext, CallWith=ScriptState] Promise<UserAgent> getUserAgent();

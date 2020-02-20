@@ -9,6 +9,9 @@
 #include "bat/ads/internal/ads_client_mock.h"
 #include "bat/ads/internal/ads_impl.h"
 
+#include "bat/ads/internal/time.h"
+#include "base/time/time.h"
+
 #include "testing/gtest/include/gtest/gtest.h"
 
 #include "bat/ads/internal/purchase_intent/purchase_intent_classifier.h"
@@ -76,6 +79,7 @@ const std::vector<std::tuple<std::string, std::vector<std::string>, uint8_t>>
       "https://creators.brave.com/",
       no_segments, 0)
 };
+
 class AdsPurchaseIntentClassifierTest : public ::testing::Test {
  protected:
   std::unique_ptr<MockAdsClient> mock_ads_client_;
@@ -98,6 +102,59 @@ class AdsPurchaseIntentClassifierTest : public ::testing::Test {
     // Code here will be called immediately after the constructor (right before
     // each test)
     purchase_intent_classifier_ = std::make_unique<PurchaseIntentClassifier>();
+
+    // TODO(Moritz Haller): Write method to dynamically generate histories
+    auto now = Time::NowInSeconds();
+    auto days = base::Time::kSecondsPerHour * base::Time::kHoursPerDay;
+
+    auto p1 = PurchaseIntentSignalHistory();
+    p1.timestamp_in_seconds = now - (6 * days);
+    p1.weight = 9;
+    auto p2 = PurchaseIntentSignalHistory();
+    p2.timestamp_in_seconds = now - (5 * days);
+    p2.weight = 9;
+    auto p3 = PurchaseIntentSignalHistory();
+    p3.timestamp_in_seconds = now - (4 * days);
+    p3.weight = 9;
+    auto p4 = PurchaseIntentSignalHistory();
+    p4.timestamp_in_seconds = now - (3 * days);
+    p4.weight = 1;
+    auto p5 = PurchaseIntentSignalHistory();
+    p5.timestamp_in_seconds = now - (2 * days);
+    p5.weight = 1;
+    auto p6 = PurchaseIntentSignalHistory();
+    p6.timestamp_in_seconds = now - (1 * days);
+    p6.weight = 2;
+    auto p7 = PurchaseIntentSignalHistory();
+    p7.timestamp_in_seconds = now - (1 * days);
+    p7.weight = 1;
+    auto p8 = PurchaseIntentSignalHistory();
+    p8.timestamp_in_seconds = now - (1 * days);
+    p8.weight = 1;
+    auto p9 = PurchaseIntentSignalHistory();
+    p9.timestamp_in_seconds = now - (1 * days);
+    p9.weight = 1;
+    auto p10 = PurchaseIntentSignalHistory();
+    p10.timestamp_in_seconds = now - (1 * days);
+    p10.weight = 1;
+    auto p11 = PurchaseIntentSignalHistory();
+    p11.timestamp_in_seconds = now - (1 * days);
+    p11.weight = 1;
+
+    histories_ = {
+      {"cat_5", {p1, p4, p9, p10}},
+      {"cat_2", {p2, p5, p11}},
+      {"cat_1", {p3, p6}},
+      {"cat_4", {p7}},
+      {"cat_3", {p8}}
+    };
+
+    histories_short_ = {
+      {"cat_1", {p1, p4}},
+      {"cat_2", {p2, p3}}
+    };
+
+    histories_empty_ = {};
   }
 
   void TearDown() override {
@@ -107,6 +164,12 @@ class AdsPurchaseIntentClassifierTest : public ::testing::Test {
 
   // Objects declared here can be used by all tests in the test case
   std::unique_ptr<PurchaseIntentClassifier> purchase_intent_classifier_;
+  std::map<std::string, std::deque<PurchaseIntentSignalHistory>>
+      histories_;
+  std::map<std::string, std::deque<PurchaseIntentSignalHistory>>
+      histories_short_;
+  std::map<std::string, std::deque<PurchaseIntentSignalHistory>>
+      histories_empty_;
 };
 
 TEST_F(AdsPurchaseIntentClassifierTest, ExtractsPurchaseIntentSignal) {
@@ -125,6 +188,76 @@ TEST_F(AdsPurchaseIntentClassifierTest, ExtractsPurchaseIntentSignal) {
     EXPECT_EQ(segments, purchase_intent_signal.segments);
     EXPECT_EQ(weight, purchase_intent_signal.weight);
   }
+}
+
+TEST_F(AdsPurchaseIntentClassifierTest, CalulatesCorrectIntentScore) {
+  // Arrange
+  auto now = Time::NowInSeconds();
+  auto days = base::Time::kSecondsPerHour * base::Time::kHoursPerDay;
+
+  auto s0 = PurchaseIntentSignalHistory();
+  s0.timestamp_in_seconds = now - (0 * days);
+  s0.weight = 3;
+  auto s1 = PurchaseIntentSignalHistory();
+  s1.timestamp_in_seconds = now - (1 * days);
+  s1.weight = 2;
+  auto s2 = PurchaseIntentSignalHistory();
+  s2.timestamp_in_seconds = now - (3 * days);
+  s2.weight = 1;
+  auto s3 = PurchaseIntentSignalHistory();
+  s3.timestamp_in_seconds = now - (3 * days);
+  s3.weight = 1;
+  auto s4 = PurchaseIntentSignalHistory();
+  s4.timestamp_in_seconds = now - (8 * days);
+  s4.weight = 1;
+
+  auto segment_history = {s0, s1, s2, s3, s4};
+
+  // Act
+  auto score = purchase_intent_classifier_->GetIntentScoreForSegment(
+      segment_history);
+
+  // Assert
+  EXPECT_EQ(7, score);
+}
+
+TEST_F(AdsPurchaseIntentClassifierTest, GetsWinningCategoriesWithEmptyHistory) {
+  // Arrange
+
+  // Act
+  auto winning_categories = purchase_intent_classifier_->GetWinningCategories(
+      histories_empty_, 3);
+
+  // Assert
+  std::vector<std::string> gold_categories = {};
+  EXPECT_EQ(gold_categories, winning_categories);
+}
+
+TEST_F(AdsPurchaseIntentClassifierTest, GetsWinningCategoriesWithShortHistory) {
+  // Arrange
+  std::map<std::string, std::deque<PurchaseIntentSignalHistory>> histories = {};
+
+  // Act
+  auto winning_categories = purchase_intent_classifier_->GetWinningCategories(
+      histories_short_, 3);
+
+  // Assert
+  std::vector<std::string> gold_categories = {"cat_2"};
+  EXPECT_EQ(gold_categories, winning_categories);
+}
+
+TEST_F(AdsPurchaseIntentClassifierTest, GetsWinningCategories) {
+  // Arrange
+
+  // Act
+  auto winning_categories = purchase_intent_classifier_->GetWinningCategories(
+      histories_, 3);
+  // std::vector<std::string> winning_categories = {};
+
+  // Assert
+  // std::vector<std::string> gold_categories = {};
+  std::vector<std::string> gold_categories = {"cat_5", "cat_1", "cat_2"};
+  EXPECT_EQ(gold_categories, winning_categories);
 }
 
 }  // namespace ads

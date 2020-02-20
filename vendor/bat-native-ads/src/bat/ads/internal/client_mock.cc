@@ -9,6 +9,7 @@
 #include "bat/ads/internal/client_mock.h"
 
 #include "bat/ads/ad_history.h"
+#include "bat/ads/purchase_intent_signal_history.h"
 #include "bat/ads/internal/time.h"
 #include "base/guid.h"
 
@@ -56,6 +57,18 @@ void ClientMock::GeneratePastCampaignHistoryFromNow(
 
     AppendTimestampToCampaignHistory(campaign_id, now_in_seconds);
   }
+}
+
+void ClientMock::GeneratePastPurchaseIntentSignalHistoryFromNow(
+    const std::string segment,
+    const uint64_t time_offset_in_seconds,
+    const std::uint16_t weight) {
+  auto now_in_seconds = Time::NowInSeconds();
+  now_in_seconds -= time_offset_in_seconds;
+  auto history = std::make_unique<PurchaseIntentSignalHistory>();
+  history->timestamp_in_seconds = 0;
+  history->weight = weight;
+  AppendToPurchaseIntentSignalHistoryForSegment(segment, *history);
 }
 
 }  // namespace ads

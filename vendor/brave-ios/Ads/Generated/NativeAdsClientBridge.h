@@ -11,9 +11,11 @@
 @required
 
 - (void)confirmAdNotification:(std::unique_ptr<ads::AdNotificationInfo>)info;
+- (void)confirmPublisherAd:(const ads::PublisherAdInfo &)info;
 - (void)confirmAction:(const std::string &)uuid creativeSetId:(const std::string &)creative_set_id confirmationType:(const ads::ConfirmationType &)type;
 - (void)eventLog:(const std::string &)json;
 - (void)getCreativeAdNotifications:(const std::vector<std::string> &)categories callback:(ads::OnGetCreativeAdNotificationsCallback)callback;
+- (void)getCreativePublisherAds:(const std::string & url, const std::vector<std::string> &)categories, const std::vector<std::string> &)sizes callback:(ads::OnGetCreativePublisherAdsCallback)callback;
 - (void)getAdConversions:(const std::string &)url callback:(ads::OnGetAdConversionsCallback)callback;
 - (std::string)getLocale;
 - (uint64_t)getAdsPerDay;
@@ -21,6 +23,7 @@
 - (void)getClientInfo:(ads::ClientInfo *)info;
 - (std::vector<std::string>)getUserModelLanguages;
 - (bool)isAdsEnabled;
+- (bool)shouldShowPublisherAdsOnParticipatingSites;
 - (bool)shouldAllowAdConversionTracking;
 - (bool)isForeground;
 - (bool)canShowBackgroundNotifications;

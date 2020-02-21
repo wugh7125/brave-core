@@ -368,10 +368,38 @@ void Client::ResetSeenAdNotifications(
   BLOG(INFO) << "Resetting seen ad notifications";
 
   for (const auto& ad : ads) {
-    auto ad_seen =
+    auto seen_ad_notification =
         client_state_->seen_ad_notifications.find(ad.creative_instance_id);
-    if (ad_seen != client_state_->seen_ad_notifications.end()) {
-      client_state_->seen_ad_notifications.erase(ad_seen);
+    if (seen_ad_notification != client_state_->seen_ad_notifications.end()) {
+      client_state_->seen_ad_notifications.erase(seen_ad_notification);
+    }
+  }
+
+  SaveState();
+}
+
+void Client::UpdateSeenPublisherAd(
+    const std::string& creative_instance_id,
+    const uint64_t value) {
+  client_state_->seen_publisher_ads.insert({creative_instance_id, value});
+
+  SaveState();
+}
+
+const std::map<std::string, uint64_t> Client::GetSeenPublisherAds() {
+  return client_state_->seen_publisher_ads;
+}
+
+void Client::ResetSeenPublisherAds(
+    const CreativePublisherAdList& ads) {
+  BLOG(INFO) << "Resetting seen publisher ads";
+
+  for (const auto& ad : ads) {
+    auto publisher_ad_uuid_seen =
+        client_state_->seen_publisher_ads.find(ad.creative_instance_id);
+    if (publisher_ad_uuid_seen !=
+        client_state_->seen_publisher_ads.end()) {
+      client_state_->seen_publisher_ads.erase(publisher_ad_uuid_seen);
     }
   }
 
@@ -395,17 +423,17 @@ void Client::ResetSeenAdvertisers(
   BLOG(INFO) << "Resetting seen advertisers";
 
   for (const auto& ad : ads) {
-    auto advertiser_uuid_seen =
+    auto seen_advertiser =
         client_state_->seen_advertisers.find(ad.advertiser_id);
-    if (advertiser_uuid_seen != client_state_->seen_advertisers.end()) {
-      client_state_->seen_advertisers.erase(advertiser_uuid_seen);
+    if (seen_advertiser != client_state_->seen_advertisers.end()) {
+      client_state_->seen_advertisers.erase(seen_advertiser);
     }
   }
 
   SaveState();
 }
 
-void Client::SetNextCheckServeAdTimestampInSeconds(
+void Client::SetNextCheckServeAdNotificationTimestampInSeconds(
     const uint64_t timestamp_in_seconds) {
   client_state_->next_check_serve_ad_timestamp_in_seconds
       = timestamp_in_seconds;
@@ -413,7 +441,7 @@ void Client::SetNextCheckServeAdTimestampInSeconds(
   SaveState();
 }
 
-uint64_t Client::GetNextCheckServeAdTimestampInSeconds() {
+uint64_t Client::GetNextCheckServeAdNotificationTimestampInSeconds() {
   return client_state_->next_check_serve_ad_timestamp_in_seconds;
 }
 

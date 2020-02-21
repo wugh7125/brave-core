@@ -223,6 +223,8 @@ class RewardsService : public KeyedService {
   virtual void SetCatalogIssuers(const std::string& json) = 0;
   virtual void ConfirmAdNotification(
       const std::string& json) = 0;
+  virtual void ConfirmPublisherAd(
+      const std::string& json) = 0;
   virtual void ConfirmAction(const std::string& creative_instance_id,
                              const std::string& creative_set_id,
                              const std::string& confirmation_type) = 0;

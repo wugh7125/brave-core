@@ -5,12 +5,19 @@
 #import <Foundation/Foundation.h>
 #import <UserNotifications/UserNotifications.h>
 
-typedef NS_ENUM(NSInteger, BATAdsNotificationEventType) {
-  BATAdsNotificationEventTypeViewed,     // = ads::NotificationEventType::VIEWED
-  BATAdsNotificationEventTypeClicked,    // = ads::NotificationEventType::CLICKED
-  BATAdsNotificationEventTypeDismissed,  // = ads::NotificationEventType::DISMISSED
-  BATAdsNotificationEventTypeTimedOut    // = ads::NotificationEventType::TIMEOUT
-} NS_SWIFT_NAME(NotificationEventType);
+typedef NS_ENUM(NSInteger, BATAdsAdNotificationEventType) {
+  BATAdsAdNotificationEventTypeViewed,     // = ads::AdNotificationEventType::VIEWED
+  BATAdsAdNotificationEventTypeClicked,    // = ads::AdNotificationEventType::CLICKED
+  BATAdsAdNotificationEventTypeDismissed,  // = ads::AdNotificationEventType::DISMISSED
+  BATAdsAdNotificationEventTypeTimedOut    // = ads::AdNotificationEventType::TIMEOUT
+} NS_SWIFT_NAME(AdNotificationEventType);
+
+typedef NS_ENUM(NSInteger, BATAdsPublisherAdEventType) {
+  BATAdsPublisherAdEventTypeViewed,        // = ads::PublisherAdEventType::VIEWED
+  BATAdsPublisherAdEventTypeClicked,       // = ads::PublisherAdEventType::CLICKED
+  BATAdsPublisherAdEventTypeDismissed,     // = ads::PublisherAdEventType::DISMISSED
+  BATAdsPublisherAdEventTypeTimedOut       // = ads::PublisherAdEventType::TIMEOUT
+} NS_SWIFT_NAME(PublisherAdEventType);
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -76,6 +83,9 @@ NS_SWIFT_NAME(BraveAds)
 /// Whether or not Brave Ads is enabled
 @property (nonatomic, assign, getter=isEnabled) BOOL enabled;
 
+/// Whether or not Brave publisher ads should be shown for pariticipating sites
+@property (nonatomic, assign, getter=isShouldShowPublisherAdsOnParticipatingSites) BOOL shouldShowPublisherAdsOnParticipatingSites;
+
 /// Whether or not the user has opted out of conversion tracking
 @property (nonatomic, assign, getter=shouldAllowAdConversionTracking) BOOL allowAdConversionTracking;
 
@@ -133,6 +143,10 @@ NS_SWIFT_NAME(BraveAds)
 /// Report that a notification event type was triggered for a given id
 - (void)reportAdNotificationEvent:(NSString *)notificationUuid
                         eventType:(BATAdsNotificationEventType)eventType;
+
+/// Report that an publisher ad event type was triggered for a given id
+- (void)reportPublisherAdEvent:(NSString *)notificationId
+                      eventType:(BATAdsPublisherAdEventType)eventType;
 
 /// Toggle that the user liked the given ad and more like it should be shown
 - (void)toggleThumbsUpForAd:(NSString *)creativeInstanceId

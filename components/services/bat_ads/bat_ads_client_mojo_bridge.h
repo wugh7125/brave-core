@@ -27,6 +27,8 @@ class BatAdsClientMojoBridge : public ads::AdsClient {
   // AdsClient implementation
   bool IsEnabled() const override;
 
+  bool ShouldShowPublisherAdsOnPariticipatingSites() const override;
+
   bool ShouldAllowAdConversionTracking() const override;
 
   bool CanShowBackgroundNotifications() const override;
@@ -61,6 +63,8 @@ class BatAdsClientMojoBridge : public ads::AdsClient {
 
   void ConfirmAdNotification(
       std::unique_ptr<ads::AdNotificationInfo> info) override;
+  void ConfirmPublisherAd(
+      const ads::PublisherAdInfo& info) override;
   void ConfirmAction(
       const std::string& creative_instance_id,
       const std::string& creative_set_id,
@@ -103,6 +107,12 @@ class BatAdsClientMojoBridge : public ads::AdsClient {
   void GetCreativeAdNotifications(
       const std::vector<std::string>& categories,
       ads::OnGetCreativeAdNotificationsCallback callback) override;
+
+  void GetCreativePublisherAds(
+      const std::string& url,
+      const std::vector<std::string>& categories,
+      const std::vector<std::string>& sizes,
+      ads::OnGetCreativePublisherAdsCallback callback) override;
 
   void GetAdConversions(
       const std::string& url,

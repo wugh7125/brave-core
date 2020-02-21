@@ -96,6 +96,17 @@ bool BatAdsClientMojoBridge::IsEnabled() const {
   return is_enabled;
 }
 
+bool
+BatAdsClientMojoBridge::ShouldShowPublisherAdsOnPariticipatingSites() const {
+  if (!connected()) {
+    return false;
+  }
+
+  bool should_show;
+  bat_ads_client_->ShouldShowPublisherAdsOnPariticipatingSites(&should_show);
+  return should_show;
+}
+
 bool BatAdsClientMojoBridge::ShouldAllowAdConversionTracking() const {
   if (!connected()) {
     return false;
@@ -258,6 +269,15 @@ void BatAdsClientMojoBridge::ConfirmAdNotification(
   }
 
   bat_ads_client_->ConfirmAdNotification(info->ToJson());
+}
+
+void BatAdsClientMojoBridge::ConfirmPublisherAd(
+    const ads::PublisherAdInfo& info) {
+  if (!connected()) {
+    return;
+  }
+
+  bat_ads_client_->ConfirmPublisherAd(info.ToJson());
 }
 
 void BatAdsClientMojoBridge::ConfirmAction(
@@ -448,6 +468,42 @@ void BatAdsClientMojoBridge::GetCreativeAdNotifications(
 
   bat_ads_client_->GetCreativeAdNotifications(categories,
       base::BindOnce(&OnGetCreativeAdNotifications, std::move(callback)));
+}
+
+void OnGetCreativePublisherAds(
+    const ads::OnGetCreativePublisherAdsCallback& callback,
+    const int32_t result,
+    const std::string& url,
+    const std::vector<std::string>& categories,
+    const std::vector<std::string>& sizes,
+    const std::vector<std::string>& json_list) {
+  ads::CreativePublisherAdList ads;
+
+  for (const auto& json : json_list) {
+    ads::CreativePublisherAdInfo ad;
+    if (ad.FromJson(json) != ads::Result::SUCCESS) {
+      callback(ads::Result::FAILED, url, categories, sizes, {});
+      return;
+    }
+
+    ads.push_back(ad);
+  }
+
+  callback(ToAdsResult(result), url, categories, sizes, ads);
+}
+
+void BatAdsClientMojoBridge::GetCreativePublisherAds(
+    const std::string& url,
+    const std::vector<std::string>& categories,
+    const std::vector<std::string>& sizes,
+    ads::OnGetCreativePublisherAdsCallback callback) {
+  if (!connected()) {
+    callback(ads::Result::FAILED, url, categories, sizes, {});
+    return;
+  }
+
+  bat_ads_client_->GetCreativePublisherAds(url, categories, sizes,
+      base::BindOnce(&OnGetCreativePublisherAds, std::move(callback)));
 }
 
 void OnGetAdConversions(

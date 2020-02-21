@@ -19,6 +19,10 @@ bool NativeAdsClient::IsEnabled() const {
   return [bridge_ isAdsEnabled];
 }
 
+bool NativeAdsClient::ShouldShowPublisherAdsOnPariticipatingSites() const {
+  return [bridge_ shouldShowPublisherAdsOnParticipatingSites];
+}
+
 bool NativeAdsClient::ShouldAllowAdConversionTracking() const {
   return [bridge_ shouldAllowAdConversionTracking];
 }
@@ -83,6 +87,10 @@ void NativeAdsClient::ConfirmAdNotification(std::unique_ptr<ads::AdNotificationI
   [bridge_ confirmAdNotification:std::move(info)];
 }
 
+void NativeAdsClient::ConfirmPublisherAd(const ads::PublisherAdInfo & info) {
+  [bridge_ confirmPublisherAd:info];
+}
+
 void NativeAdsClient::ConfirmAction(const std::string & uuid, const std::string & creative_set_id, const ads::ConfirmationType & type) {
   [bridge_ confirmAction:uuid creativeSetId:creative_set_id confirmationType:type];
 }
@@ -125,6 +133,10 @@ void NativeAdsClient::SaveBundleState(std::unique_ptr<ads::BundleState> state, a
 
 void NativeAdsClient::GetCreativeAdNotifications(const std::vector<std::string> & categories, ads::OnGetCreativeAdNotificationsCallback callback) {
   [bridge_ getCreativeAdNotifications:categories callback:callback];
+}
+
+void NativeAdsClient::GetCreativePublisherAds(const std::string & url, const std::vector<std::string> & categories, const std::vector<std::string> & sizes, ads::OnGetCreativePublisherAdsCallback callback) {
+  [bridge_ getCreativePublisherAds:url categories:categories callback:callback];
 }
 
 void NativeAdsClient::GetAdConversions(const std::string & url, ads::OnGetAdConversionsCallback callback) {

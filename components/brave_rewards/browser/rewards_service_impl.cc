@@ -1790,6 +1790,15 @@ void RewardsServiceImpl::ConfirmAdNotification(
   bat_ledger_->ConfirmAdNotification(json);
 }
 
+void RewardsServiceImpl::ConfirmPublisherAd(
+    const std::string& json) {
+  if (!Connected()) {
+    return;
+  }
+
+  bat_ledger_->ConfirmPublisherAd(json);
+}
+
 void RewardsServiceImpl::ConfirmAction(
     const std::string& creative_instance_id,
     const std::string& creative_set_id,

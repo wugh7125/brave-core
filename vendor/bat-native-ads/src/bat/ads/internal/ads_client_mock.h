@@ -42,6 +42,8 @@ class MockAdsClient : public AdsClient {
 
   MOCK_CONST_METHOD0(IsEnabled, bool());
 
+  MOCK_CONST_METHOD0(ShouldShowPublisherAdsOnPariticipatingSites, bool());
+
   MOCK_CONST_METHOD0(ShouldAllowAdConversionTracking, bool());
 
   MOCK_CONST_METHOD0(GetLocale, std::string());
@@ -79,6 +81,9 @@ class MockAdsClient : public AdsClient {
 
   MOCK_METHOD1(ConfirmAdNotification, void(
       std::unique_ptr<AdNotificationInfo> info));
+
+  MOCK_METHOD1(ConfirmPublisherAd, void(
+      const PublisherAdInfo& info));
 
   MOCK_METHOD3(ConfirmAction, void(
       const std::string& creative_instance_id,
@@ -125,6 +130,12 @@ class MockAdsClient : public AdsClient {
   MOCK_METHOD2(GetCreativeAdNotifications, void(
       const std::vector<std::string>& categories,
       OnGetCreativeAdNotificationsCallback callback));
+
+  MOCK_METHOD4(GetCreativePublisherAds, void(
+      const std::string& url,
+      const std::vector<std::string>& categories,
+      const std::vector<std::string>& sizes,
+      const OnGetCreativePublisherAdsCallback callback));
 
   MOCK_METHOD2(GetAdConversions, void(
       const std::string& url,

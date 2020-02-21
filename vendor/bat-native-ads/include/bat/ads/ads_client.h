@@ -16,12 +16,14 @@
 #include <functional>
 
 #include "bat/ads/creative_ad_notification_info.h"
+#include "bat/ads/creative_publisher_ad_info.h"
 #include "bat/ads/ad_conversion_info.h"
 #include "bat/ads/issuers_info.h"
 #include "bat/ads/bundle_state.h"
 #include "bat/ads/client_info.h"
 #include "bat/ads/export.h"
 #include "bat/ads/ad_notification_info.h"
+#include "bat/ads/publisher_ad_info.h"
 #include "bat/ads/result.h"
 
 namespace ads {
@@ -52,6 +54,10 @@ using OnResetCallback = std::function<void(const Result)>;
 using OnGetCreativeAdNotificationsCallback = std::function<void(const Result,
     const std::vector<std::string>&, const CreativeAdNotificationList&)>;
 
+using OnGetCreativePublisherAdsCallback = std::function<void(const Result,
+    const std::string&, const std::vector<std::string>&,
+        const std::vector<std::string>&, const CreativePublisherAdList&)>;
+
 using OnGetAdConversionsCallback = std::function<void(const Result,
     const std::string&, const AdConversionList&)>;
 
@@ -67,6 +73,10 @@ class ADS_EXPORT AdsClient {
 
   // Should return |true| if ads is enabled; otherwise, should return |false|
   virtual bool IsEnabled() const = 0;
+
+  // Should return |true| if publisher ads should be shown on participating
+  // sites; otherwise, should return |false|
+  virtual bool ShouldShowPublisherAdsOnPariticipatingSites() const = 0;
 
   // Should return |true| if allow ad conversion tracking is enabled; otherwise,
   // should return |false|
@@ -149,6 +159,11 @@ class ADS_EXPORT AdsClient {
   // clicked, dismissed or landed
   virtual void ConfirmAdNotification(
       const std::unique_ptr<AdNotificationInfo> info) = 0;
+
+  // Should pass-through to Confirmations that a publisher ad was viewed,
+  // clicked or landed
+  virtual void ConfirmPublisherAd(
+      const PublisherAdInfo& info) = 0;
 
   // Should pass-through to Confirmations that an ad was flagged, upvoted or
   // downvoted
@@ -238,6 +253,18 @@ class ADS_EXPORT AdsClient {
   virtual void GetCreativeAdNotifications(
       const std::vector<std::string>& categories,
       OnGetCreativeAdNotificationsCallback callback) = 0;
+
+  // Should fetch all creative publisher ads for the specified |url|,
+  // |categories| and |sizes|. The callback takes 5 arguments — |Result| should
+  // be set to |SUCCESS| if successful; otherwise, should be set to |FAILED|.
+  // |url| should contain the requested URL. |categories| should contain the
+  // requested categories. |sizes| should contain the requested sizes. |ads|
+  // should contain an array of ads
+  virtual void GetCreativePublisherAds(
+      const std::string& url,
+      const std::vector<std::string>& categories,
+      const std::vector<std::string>& sizes,
+      const OnGetCreativePublisherAdsCallback callback) = 0;
 
   // Should fetch all ad conversions for the specified |url| from the
   // previously persisted bundle state. The callback takes 3 arguments —

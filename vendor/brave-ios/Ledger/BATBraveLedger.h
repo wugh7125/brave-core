@@ -249,6 +249,9 @@ NS_SWIFT_NAME(BraveLedger)
 /// Confirm an ad and update confirmations (called from the ads layer)
 - (void)confirmAdNotification:(NSString *)info;
 
+/// Confirm a publisher ad and update confirmations (called from the ads layer)
+- (void)confirmPublisherAd:(NSString *)json;
+
 /// Confirm an action on an ad and update confirmations was sustained (called from ads layer)
 - (void)confirmAction:(NSString *)creativeInstanceId creativeSetID:(NSString *)creativeSetID type:(NSString *)type;
 

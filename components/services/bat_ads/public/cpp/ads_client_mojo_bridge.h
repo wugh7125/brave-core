@@ -29,6 +29,10 @@ class AdsClientMojoBridge : public mojom::BatAdsClient,
       bool* out_is_enabled) override;
   void IsEnabled(
       IsEnabledCallback callback) override;
+  bool ShouldShowPublisherAdsOnPariticipatingSites(
+      bool* out_should_show) override;
+  void ShouldShowPublisherAdsOnPariticipatingSites(
+      ShouldShowPublisherAdsOnPariticipatingSitesCallback callback) override;
   bool ShouldAllowAdConversionTracking(
       bool* should_allow) override;
   void ShouldAllowAdConversionTracking(
@@ -118,6 +122,8 @@ class AdsClientMojoBridge : public mojom::BatAdsClient,
       const std::string& issuers_info) override;
   void ConfirmAdNotification(
       const std::string& json) override;
+  void ConfirmPublisherAd(
+      const std::string& json) override;
   void ConfirmAction(
       const std::string& creative_instance_id,
       const std::string& creative_set_id,
@@ -128,6 +134,11 @@ class AdsClientMojoBridge : public mojom::BatAdsClient,
   void GetCreativeAdNotifications(
       const std::vector<std::string>& categories,
       GetCreativeAdNotificationsCallback callback) override;
+  void GetCreativePublisherAds(
+      const std::string& url,
+      const std::vector<std::string>& categories,
+      const std::vector<std::string>& sizes,
+      GetCreativePublisherAdsCallback callback) override;
   void GetAdConversions(
       const std::string& url,
       GetAdConversionsCallback callback) override;
@@ -180,6 +191,13 @@ class AdsClientMojoBridge : public mojom::BatAdsClient,
       const ads::Result result,
       const std::vector<std::string>& categories,
       const ads::CreativeAdNotificationList& ads);
+  static void OnGetCreativePublisherAds(
+      CallbackHolder<GetCreativePublisherAdsCallback>* holder,
+      const ads::Result result,
+      const std::string& url,
+      const std::vector<std::string>& categories,
+      const std::vector<std::string>& sizes,
+      const ads::CreativePublisherAdList& ads);
   static void OnGetAdConversions(
       CallbackHolder<GetAdConversionsCallback>* holder,
       const ads::Result result,

@@ -472,6 +472,11 @@ void BatLedgerImpl::ConfirmAdNotification(
   ledger_->ConfirmAdNotification(json);
 }
 
+void BatLedgerImpl::ConfirmPublisherAd(
+    const std::string& json) {
+  ledger_->ConfirmPublisherAd(json);
+}
+
 void BatLedgerImpl::ConfirmAction(
     const std::string& creative_instance_id,
     const std::string& creative_set_id,

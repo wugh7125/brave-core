@@ -230,15 +230,28 @@ ads::CreativeAdNotificationList GetCreativeAdNotificationsOnFileTaskRunner(
   return ads;
 }
 
+ads::CreativePublisherAdList GetCreativePublisherAdsOnFileTaskRunner(
+    const std::string& url,
+    const std::vector<std::string>& categories,
+    const std::vector<std::string>& sizes,
+    BundleStateDatabase* backend) {
+  if (!backend) {
+    return {};
+  }
+
+  ads::CreativePublisherAdList ads;
+  backend->GetCreativePublisherAds(url, categories, sizes, &ads);
+  return ads;
+}
+
 ads::AdConversionList GetAdConversionsOnFileTaskRunner(
     const std::string& url,
     BundleStateDatabase* backend) {
-  ads::AdConversionList ad_conversions;
-
   if (!backend) {
-    return ad_conversions;
+    return {};
   }
 
+  ads::AdConversionList ad_conversions;
   backend->GetAdConversions(url, &ad_conversions);
 
   return ad_conversions;
@@ -367,6 +380,12 @@ void AdsServiceImpl::SetEnabled(
   rewards_service_->OnAdsEnabled(is_enabled);
 }
 
+void AdsServiceImpl::SetShowPublisherAdsOnPariticipatingSites(
+    const bool should_show) {
+  SetBooleanPref(prefs::kShouldShowPublisherAdsOnParticipatingSites,
+      should_show);
+}
+
 void AdsServiceImpl::SetAllowAdConversionTracking(
     const bool should_allow) {
   SetBooleanPref(prefs::kShouldAllowAdConversionTracking, should_allow);
@@ -444,6 +463,38 @@ void AdsServiceImpl::OnTabClosed(
   bat_ads_->OnTabClosed(tab_id.id());
 }
 
+void AdsServiceImpl::OnPublisherAdEvent(
+    const PublisherAdInfo& info,
+    const PublisherAdEventType event_type) {
+  if (!connected()) {
+    return;
+  }
+
+  ads::PublisherAdInfo ad;
+  ad.creative_instance_id = info.creative_instance_id;
+  ad.creative_set_id = info.creative_set_id;
+  ad.category = info.category;
+  ad.size = info.size;
+  ad.creative_url = info.creative_url;
+  ad.target_url = info.target_url;
+
+  const std::string json = ad.ToJson();
+
+  switch (event_type) {
+    case PublisherAdEventType::kViewed: {
+      bat_ads_->OnPublisherAdEvent(json, ads::PublisherAdEventType::kViewed);
+      break;
+    }
+
+    case PublisherAdEventType::kClicked: {
+      OpenNewTabWithUrl(ad.target_url);
+
+      bat_ads_->OnPublisherAdEvent(json, ads::PublisherAdEventType::kClicked);
+      break;
+    }
+  }
+}
+
 void AdsServiceImpl::GetAdsHistory(
     const uint64_t from_timestamp,
     const uint64_t to_timestamp,
@@ -454,6 +505,19 @@ void AdsServiceImpl::GetAdsHistory(
 
   bat_ads_->GetAdsHistory(from_timestamp, to_timestamp,
       base::BindOnce(&AdsServiceImpl::OnGetAdsHistory, AsWeakPtr(),
+          std::move(callback)));
+}
+
+void AdsServiceImpl::GetPublisherAds(
+    const std::string& url,
+    const std::vector<std::string>& sizes,
+    OnGetPublisherAdsCallback callback) {
+  if (!connected()) {
+    return;
+  }
+
+  bat_ads_->GetPublisherAds(url, sizes,
+      base::BindOnce(&AdsServiceImpl::OnGetPublisherAds, AsWeakPtr(),
           std::move(callback)));
 }
 
@@ -522,6 +586,11 @@ bool AdsServiceImpl::IsEnabled() const {
       GetBooleanPref(brave_rewards::prefs::kBraveRewardsEnabled);
 
   return is_enabled && is_rewards_enabled;
+}
+
+bool AdsServiceImpl::ShouldShowPublisherAdsOnPariticipatingSites() const {
+  return IsEnabled() && GetBooleanPref(
+      prefs::kShouldShowPublisherAdsOnParticipatingSites);
 }
 
 bool AdsServiceImpl::ShouldAllowAdConversionTracking() const {
@@ -989,6 +1058,21 @@ void AdsServiceImpl::OnGetCreativeAdNotifications(
   callback(result, categories, ads);
 }
 
+void AdsServiceImpl::OnGetCreativePublisherAds(
+    const ads::OnGetCreativePublisherAdsCallback& callback,
+    const std::string& url,
+    const std::vector<std::string>& categories,
+    const std::vector<std::string>& sizes,
+    const ads::CreativePublisherAdList& ads) {
+  if (!connected()) {
+    return;
+  }
+
+  auto result = ads.empty() ? ads::Result::FAILED : ads::Result::SUCCESS;
+
+  callback(result, url, categories, sizes, ads);
+}
+
 void AdsServiceImpl::OnGetAdConversions(
     const ads::OnGetAdConversionsCallback& callback,
     const std::string& url,
@@ -1065,6 +1149,31 @@ void AdsServiceImpl::OnGetAdsHistory(
   }
 
   std::move(callback).Run(list);
+}
+
+void AdsServiceImpl::OnGetPublisherAds(
+    OnGetPublisherAdsCallback callback,
+    const std::string& url,
+    const std::vector<std::string>& sizes,
+    const std::string& json) {
+  ads::PublisherAds ads;
+  ads.FromJson(json);
+
+  base::ListValue list;
+  for (const auto& entry : ads.entries) {
+    base::DictionaryValue dictionary;
+    dictionary.SetKey("creativeInstanceId",
+        base::Value(entry.creative_instance_id));
+    dictionary.SetKey("creativeSetId", base::Value(entry.creative_set_id));
+    dictionary.SetKey("category", base::Value(entry.category));
+    dictionary.SetKey("size", base::Value(entry.size));
+    dictionary.SetKey("creativeUrl", base::Value(entry.creative_url));
+    dictionary.SetKey("targetUrl", base::Value(entry.target_url));
+
+    list.GetList().emplace_back(std::move(dictionary));
+  }
+
+  std::move(callback).Run(url, sizes, list);
 }
 
 void AdsServiceImpl::OnRemoveAllHistory(
@@ -1982,6 +2091,11 @@ void AdsServiceImpl::ConfirmAdNotification(
   rewards_service_->ConfirmAdNotification(info->ToJson());
 }
 
+void AdsServiceImpl::ConfirmPublisherAd(
+    const ads::PublisherAdInfo& info) {
+  rewards_service_->ConfirmPublisherAd(info.ToJson());
+}
+
 void AdsServiceImpl::ConfirmAction(
     const std::string& creative_instance_id,
     const std::string& creative_set_id,
@@ -2124,6 +2238,18 @@ void AdsServiceImpl::GetCreativeAdNotifications(
           categories, bundle_state_backend_.get()),
       base::BindOnce(&AdsServiceImpl::OnGetCreativeAdNotifications,
           AsWeakPtr(), std::move(callback), categories));
+}
+
+void AdsServiceImpl::GetCreativePublisherAds(
+    const std::string& url,
+    const std::vector<std::string>& categories,
+    const std::vector<std::string>& sizes,
+    const ads::OnGetCreativePublisherAdsCallback callback) {
+  base::PostTaskAndReplyWithResult(file_task_runner_.get(), FROM_HERE,
+      base::BindOnce(&GetCreativePublisherAdsOnFileTaskRunner,
+          url, categories, sizes, bundle_state_backend_.get()),
+      base::BindOnce(&AdsServiceImpl::OnGetCreativePublisherAds,
+          AsWeakPtr(), std::move(callback), url, categories, sizes));
 }
 
 void AdsServiceImpl::GetAdConversions(

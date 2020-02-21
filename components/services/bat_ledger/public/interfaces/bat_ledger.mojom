@@ -99,6 +99,7 @@ interface BatLedger {
 
   SetCatalogIssuers(string json);
   ConfirmAdNotification(string json);
+  ConfirmPublisherAd(string json);
   ConfirmAction(string creative_instance_id, string creative_set_id, string confirmation_type);
   GetTransactionHistory() => (string json);
   GetRewardsInternalsInfo() => (ledger.mojom.RewardsInternalsInfo info);

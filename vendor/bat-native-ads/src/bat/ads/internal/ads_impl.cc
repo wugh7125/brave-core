@@ -758,6 +758,8 @@ void AdsImpl::ExtractPurchaseIntentSignal(const std::string& url) {
   PurchaseIntentSignalInfo purchase_intent_signal =
       purchase_intent_classifier_->ExtractIntentSignal(url);
 
+  // TODO(Moritz Haller): Reports intent signal for non intent sites like
+  // techcrunch and example.org
   if (purchase_intent_signal.segments.empty() &&
       purchase_intent_signal.timestamp_in_seconds == 0) {
     return;

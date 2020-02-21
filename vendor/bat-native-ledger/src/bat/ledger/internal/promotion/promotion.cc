@@ -418,7 +418,8 @@ void Promotion::Retry(ledger::PromotionMap promotions) {
       }
       case ledger::PromotionStatus::ACTIVE:
       case ledger::PromotionStatus::FINISHED:
-      case ledger::PromotionStatus::OVER: {
+      case ledger::PromotionStatus::OVER: 
+      case ledger::PromotionStatus::UNKNOWN: {
         break;
       }
     }
@@ -908,6 +909,16 @@ void Promotion::PromotionListDeleted(const ledger::Result result) {
   }
 
   ledger_->SetBooleanState(ledger::kStatePromotionCorruptedMigrated, true);
+}
+
+void Promotion::SetLastCheckTimerIdForTesting(
+    uint32_t timer_id) {
+  last_check_timer_id_ = timer_id;
+}
+
+void Promotion::SetRetryTimerIdForTesting(
+    uint32_t timer_id) {
+  retry_timer_id_ = timer_id;
 }
 
 }  // namespace braveledger_promotion

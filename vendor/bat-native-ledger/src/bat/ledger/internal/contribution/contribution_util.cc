@@ -7,6 +7,12 @@
 
 #include "bat/ledger/internal/contribution/contribution_util.h"
 
+#include "wrapper.hpp"  // NOLINT
+
+using challenge_bypass_ristretto::UnblindedToken;
+using challenge_bypass_ristretto::VerificationKey;
+using challenge_bypass_ristretto::VerificationSignature;
+
 namespace braveledger_contribution {
 
 ledger::ReconcileDirections
@@ -47,6 +53,37 @@ ledger::ReportType GetReportTypeFromRewardsType(
       return ledger::ReportType::TIP;
     }
   }
+}
+
+void GenerateSuggestion(
+    const std::string& token_value,
+    const std::string& public_key,
+    const std::string& suggestion_encoded,
+    base::Value* result) {
+  UnblindedToken unblinded = UnblindedToken::decode_base64(token_value);
+  VerificationKey verification_key = unblinded.derive_verification_key();
+  VerificationSignature signature = verification_key.sign(suggestion_encoded);
+  const std::string pre_image = unblinded.preimage().encode_base64();
+
+  if (challenge_bypass_ristretto::exception_occurred()) {
+    challenge_bypass_ristretto::TokenException e =
+        challenge_bypass_ristretto::get_last_exception();
+    return;
+  }
+
+  result->SetStringKey("t", pre_image);
+  result->SetStringKey("publicKey", public_key);
+  result->SetStringKey("signature", signature.encode_base64());
+}
+
+void GenerateSuggestionMock(
+    const std::string& token_value,
+    const std::string& public_key,
+    const std::string& suggestion_encoded,
+    base::Value* result) {
+  result->SetStringKey("t", token_value);
+  result->SetStringKey("publicKey", public_key);
+  result->SetStringKey("signature", token_value);
 }
 
 }  // namespace braveledger_contribution

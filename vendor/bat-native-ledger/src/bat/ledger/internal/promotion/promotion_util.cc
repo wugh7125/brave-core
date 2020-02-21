@@ -5,6 +5,7 @@
 
 #include <utility>
 
+#include "bat/ledger/global_constants.h"
 #include "bat/ledger/internal/promotion/promotion_util.h"
 #include "base/json/json_reader.h"
 #include "base/json/json_writer.h"
@@ -385,6 +386,12 @@ bool VerifyPublicKey(const ledger::PromotionPtr promotion) {
   }
 
   return false;
+}
+
+std::vector<std::string>GetTransferablePromotions() {
+  return {
+    ledger::kWalletUphold
+  };
 }
 
 }  // namespace braveledger_promotion
